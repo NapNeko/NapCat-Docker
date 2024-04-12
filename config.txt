@@ -1,0 +1,17 @@
+{
+    "httpPort": HTTP_PORT,
+    "httpPostUrls": ["HTTP_URLS"],
+    "httpSecret": "",
+    "wsPort": WS_PORT,
+    "wsReverseUrls": ["WS_URLS"],
+    "enableHttp": HTTP_ENABLE,
+    "enableHttpPost": HTTP_POST_ENABLE,
+    "enableWs": WS_ENABLE,
+    "enableWsReverse": WSR_ENABLE,
+    "messagePostFormat": "array",
+    "reportSelfMessage": RSM_ENABLE,
+    "debug": DEBUG_ENABLE,
+    "enableLocalFile2Url": F2U_ENABLE,
+    "heartInterval": HEART,
+    "token": "TOKEN"
+}
