@@ -2,7 +2,7 @@
 
 # 设置仓库信息
 repository="NapNeko/NapCat.Build"
-run_id="8662095740"
+run_id="8674568648"
 arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
 artifact_name="NapCat.linux.$arch"
 token="$1"
