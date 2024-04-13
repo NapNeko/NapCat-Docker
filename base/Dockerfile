@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     libatspi2.0-0 \
     libx11-xcb1 \
+    ffmpeg \
     unzip \
     curl \
     supervisor && \   
