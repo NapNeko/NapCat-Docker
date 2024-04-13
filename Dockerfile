@@ -12,6 +12,7 @@ RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
     # 安装 napcat
     unzip /tmp/NapCat.linux.zip -d /root/ && \
     rm /tmp/NapCat.linux.zip && \
+    ln -s /usr/bin/ffmpeg /root/ffmpeg && \
 
     chmod +x /root/napcat.sh && \
     chmod +x /root/entrypoint.sh && \
