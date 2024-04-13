@@ -1,6 +1,13 @@
 # NapCat-Docker
-NapCat-Docker
 
+[DockerHub](https://hub.docker.com/r/mlikiowa/napcat-docker)
+
+## Support Platform/Arch
+- [x] Linux/Amd64
+- [x] Linux/Arm64
+
+
+# 启动容器
 
 ## 正向 WS
 
@@ -20,7 +27,7 @@ mlikiowa/napcat-docker:latest
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WSR_ENABLE=true \
--e WS_URLS="ws://localhost:5140/onebot" \
+-e WS_URLS="ws://192.168.3.8:5140/onebot" \
 --name napcat \
 mlikiowa/napcat-docker:latest
 ```
@@ -32,8 +39,14 @@ docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e HTTP_ENABLE=true \
 -e HTTP_POST_ENABLE=true \
--e HTTP_URLS="http://localhost:5140/onebot" \
+-e HTTP_URLS="http://192.168.3.8:5140/onebot" \
 -p 3000:3000 \
 --name napcat \
 mlikiowa/napcat-docker:latest
+```
+
+# 登录
+
+```shell
+dockers logs napcat
 ```
