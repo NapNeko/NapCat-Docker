@@ -50,7 +50,7 @@ jobs:
       - 
         name: Get artifacts
         run: |
-          bash get_artifacts.sh ${{ secrets.ARTIFACTS_TOKEN }}
+          bash get_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
           ls -lh
       -
         name: Build and push by digest
