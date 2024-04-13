@@ -20,6 +20,20 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
+```yaml
+# docker compose 正向 WS
+version: "3"
+services:
+    napcat:
+        environment:
+            - ACCOUNT=<机器人qq>
+            - WS_ENABLE=true
+        ports:
+            - 3001:3001
+        container_name: napcat
+        network_mode: bridge
+        image: mlikiowa/napcat-docker:latest
+```
 
 ## 反向 WS
 
@@ -32,7 +46,19 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
-
+```yaml
+# docker compose 反向 WS
+version: "3"
+services:
+    napcat:
+        environment:
+            - ACCOUNT=<机器人qq>
+            - WSR_ENABLE=true
+            - WS_URLS="ws://192.168.3.8:5140/onebot"
+        container_name: napcat
+        network_mode: bridge
+        image: mlikiowa/napcat-docker:latest
+```
 ## HTTP
 ```shell
 docker run -d \
@@ -45,8 +71,24 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
+```yaml
+# docker compose HTTP POST
+version: "3"
+services:
+    napcat:
+        environment:
+            - ACCOUNT=<机器人qq>
+            - HTTP_ENABLE=true
+            - HTTP_POST_ENABLE=true
+            - HTTP_URLS="http://192.168.3.8:5140/onebot"
+        ports:
+            - 3000:3000
+        container_name: napcat
+        network_mode: bridge
+        image: mlikiowa/napcat-docker:latest
+```
 # 登录
 
 ```shell
-dockers logs napcat
+docker logs napcat
 ```
