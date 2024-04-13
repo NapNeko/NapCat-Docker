@@ -51,6 +51,7 @@ jobs:
         name: Get artifacts
         run: |
           bash get_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
+          ll -h
       -
         name: Build and push by digest
         id: build
