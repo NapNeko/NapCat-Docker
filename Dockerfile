@@ -1,11 +1,11 @@
-FROM initialencounter/napcat:base
+FROM mlikiowa/napcat-docker:base
 
 COPY NapCat.linux.zip /tmp/NapCat.linux.zip
 COPY config.txt entrypoint.sh /root/
 
 # 安装Linux QQ
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
-    curl -o /root/linuxqq.deb https://dldir1.qq.com/qqfile/qq/QQNT/Linux/QQ_3.2.7_240410_{arch}_01.deb && \
+    curl -o /root/linuxqq.deb https://dldir1.qq.com/qqfile/qq/QQNT/Linux/QQ_3.2.7_240410_${arch}_01.deb && \
     ls -lh /root && \
     dpkg -i --force-depends /root/linuxqq.deb && rm /root/linuxqq.deb && \
 
