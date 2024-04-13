@@ -50,7 +50,7 @@ if [ ! -f "$CONFIG_PATH" ]; then
         sed -i "s/WSR_ENABLE/false/" $CONFIG_PATH
     fi
 
-    if [ "WS_URLS" ]; then
+    if [ "&WS_URLS" ]; then
         sed -i "s/WS_URLS/$WS_URLS/" $CONFIG_PATH
     else
         sed -i "s/\"WS_URLS\"/\"\"/" $CONFIG_PATH
