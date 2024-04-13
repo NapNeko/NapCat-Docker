@@ -5,7 +5,7 @@ repository="NapNeko/NapCat.Build"
 run_id="8662095740"
 arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
 artifact_name="NapCat.linux.{$arch}"
-token=""
+token="$1"
 
 # 设置输出目录
 output_dir="."
