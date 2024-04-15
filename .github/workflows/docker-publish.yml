@@ -49,6 +49,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - 
         name: Get artifacts
+        env:
+            ARCH_NC: ${{ matrix.platform }}
         run: |
           bash get_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
           ls -lh
