@@ -51,7 +51,7 @@ if [ ! -f "$CONFIG_PATH" ]; then
     fi
 
     if [ "$WS_URLS" ]; then
-        sed -i "s/WS_URLS/$WS_URLS/" $CONFIG_PATH
+        sed -i "s#WS_URLS#$WS_URLS#" $CONFIG_PATH
     else
         sed -i "s/\"WS_URLS\"/\"\"/" $CONFIG_PATH
     fi
