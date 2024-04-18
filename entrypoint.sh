@@ -1,8 +1,8 @@
 #!/bin/bash
 
-sed -i "s|COMMAND|bash napcat.sh -q $ACCOUNT|" /etc/supervisord.conf
+sed -i "s|COMMAND|bash napcat/napcat.sh -q $ACCOUNT|" /etc/supervisord.conf
 
-CONFIG_PATH=config/onebot11_$ACCOUNT.json
+CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 # 容器首次启动时执行
 if [ ! -f "$CONFIG_PATH" ]; then
     cp -f config.txt $CONFIG_PATH
@@ -94,5 +94,5 @@ if [ ! -f "$CONFIG_PATH" ]; then
 fi
 
 export FFMPEG_PATH=/usr/bin/ffmpeg
-bash napcat.sh -q $ACCOUNT &
+bash napcat/napcat.sh -q $ACCOUNT &
 exec supervisord
