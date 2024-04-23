@@ -59,7 +59,7 @@ services:
         environment:
             - ACCOUNT=<机器人qq>
             - WSR_ENABLE=true
-            - WS_URLS="ws://192.168.3.8:5140/onebot"
+            - WS_URLS=ws://192.168.3.8:5140/onebot
         container_name: napcat
         network_mode: bridge
         image: mlikiowa/napcat-docker:latest
@@ -85,7 +85,7 @@ services:
             - ACCOUNT=<机器人qq>
             - HTTP_ENABLE=true
             - HTTP_POST_ENABLE=true
-            - HTTP_URLS="http://192.168.3.8:5140/onebot"
+            - HTTP_URLS=http://192.168.3.8:5140/onebot
         ports:
             - 3000:3000
         container_name: napcat
