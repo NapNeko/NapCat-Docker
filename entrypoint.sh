@@ -91,6 +91,10 @@ if [ ! -f "$CONFIG_PATH" ]; then
     else
         sed -i "s/RSM_ENABLE/false/" $CONFIG_PATH
     fi
+
+    if [ "$MESSAGE_POST_FORMAT" ]; then
+        sed -i "s/\"messagePostFormat\": \"array\"/\"messagePostFormat\": \"$MESSAGE_POST_FORMAT\"/" $CONFIG_PATH
+    fi
 fi
 
 export FFMPEG_PATH=/usr/bin/ffmpeg
