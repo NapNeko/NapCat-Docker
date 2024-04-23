@@ -6,6 +6,11 @@
 - [x] Linux/Amd64
 - [x] Linux/Arm64
 
+## 配置
+
+容器通过环境变量来配置，环境变量名称可以查看 [config.txt](./config.txt)
+
+具体参数可参考[官方README](https://github.com/NapNeko/NapCatQQ?tab=readme-ov-file#%E5%90%AF%E5%8A%A8)
 
 # 启动容器
 

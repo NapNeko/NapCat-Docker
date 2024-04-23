@@ -93,7 +93,9 @@ if [ ! -f "$CONFIG_PATH" ]; then
     fi
 
     if [ "$MESSAGE_POST_FORMAT" ]; then
-        sed -i "s/\"messagePostFormat\": \"array\"/\"messagePostFormat\": \"$MESSAGE_POST_FORMAT\"/" $CONFIG_PATH
+        sed -i "s/MESSAGE_POST_FORMAT/$MESSAGE_POST_FORMAT/" $CONFIG_PATH
+    else
+        sed -i "s/MESSAGE_POST_FORMAT/array/" $CONFIG_PATH
     fi
 fi
 
