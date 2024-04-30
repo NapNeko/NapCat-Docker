@@ -10,7 +10,7 @@
 
 容器通过环境变量来配置，环境变量名称可以查看 [config.txt](./config.txt)
 
-具体参数可参考[官方README](https://github.com/NapNeko/NapCatQQ?tab=readme-ov-file#%E5%90%AF%E5%8A%A8)
+具体参数可参考[官方文档](https://napneko.github.io/zh-CN/guide/getting-started)
 
 # 启动容器
 
