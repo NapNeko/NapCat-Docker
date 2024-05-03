@@ -11,7 +11,9 @@ RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
     dpkg -i --force-depends linuxqq.deb && rm linuxqq.deb
 
 # 安装 napcat
-RUN unzip NapCat.linux.zip -d napcat && \
+RUN rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
+    unzip NapCat.linux.zip -d napcat && \
+    mv ./napcat/NapCat.linux.${arch}/* ./
     rm NapCat.linux.zip && \
     ln -s /usr/bin/ffmpeg ./ffmpeg && \
     chmod +x napcat/napcat.sh && \
