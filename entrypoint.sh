@@ -98,4 +98,5 @@ if [ ! -f "$CONFIG_PATH" ]; then
 fi
 
 export FFMPEG_PATH=/usr/bin/ffmpeg
-bash napcat/napcat.sh -q $ACCOUNT &
+cd ./napcat
+./napcat.sh -q $ACCOUNT
