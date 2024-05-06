@@ -7,6 +7,6 @@ artifact_name="NapCat.linux.$ARCH_DOWN"
 output_dir="."
 echo "当前架构$ARCH_DOWN"
 # 下载release
-curl -s -X GET -H "Authorization: token $token" -L "https://github.com/NapNeko/NapCatQQ/releases/download/v1.2.0/$artifact_name.zip" -o "$output_dir/NapCat.linux.zip"
+curl -s -X GET -H "Authorization: token $token" -L "https://github.com/NapNeko/NapCatQQ/releases/download/v1.2.0/NapCat.linux.x64.docker2.zip" -o "$output_dir/NapCat.linux.zip"
 ls
 echo "编译产物已保存到$output_dir/NapCat.linux.zip"
