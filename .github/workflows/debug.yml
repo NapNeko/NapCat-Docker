@@ -34,7 +34,7 @@ jobs:
             --output "type=image,push=true" \
             --platform linux/amd64,linux/arm64 \
             --tag ${DOCKER_REPO}:$TAG \
-            --tag ${DOCKER_REPO}:latest \
+            --tag ${DOCKER_REPO}:latest-test \
             --file ./Dockerfile \
             ./docker
       - name: Docker Hub logout
