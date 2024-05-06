@@ -2,7 +2,7 @@ FROM mlikiowa/napcat-docker:base
 
 WORKDIR /usr/src/app
 
-COPY NapCat.linux.zip NapCat.linux.zip
+COPY NapCat.linux.arm64.zip NapCat.linux.x64.zip .
 COPY config.txt entrypoint.sh ./
 
 # 安装Linux QQ
@@ -12,9 +12,8 @@ RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
 
 # 安装 napcat
 RUN rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) && \
-    unzip NapCat.linux.zip -d napcat && \
-    mv ./napcat/NapCat.linux.${rarch}/* ./napcat/  && \
-    rm NapCat.linux.zip && \
+    unzip NapCat.linux.${rarch}.zip -d . && \
+    mv NapCat.linux.${rarch} napcat && \
     chmod +x napcat/napcat.sh && \
     chmod +x entrypoint.sh
 
