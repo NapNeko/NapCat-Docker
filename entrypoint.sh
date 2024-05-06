@@ -119,6 +119,11 @@ if [ ! -f "$CONFIG_PATH" ]; then
     else
         sed -i "s/MUSIC_SIGN_URL//" $CONFIG_PATH
     fi
+    if [ "$HTTP_SECRET" ]; then
+        sed -i "s/HTTP_SECRET/$HTTP_SECRET/" $CONFIG_PATH
+    else
+        sed -i "s/HTTP_SECRET//" $CONFIG_PATH
+    fi
 fi
 
 export FFMPEG_PATH=/usr/bin/ffmpeg

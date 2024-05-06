@@ -2,7 +2,7 @@
     "httpPort": HTTP_PORT,
     "httpHost": "HTTP_HOST",
     "httpPostUrls": ["HTTP_URLS"],
-    "httpSecret": "",
+    "httpSecret": "HTTP_SECRET",
     "wsPort": WS_PORT,
     "wsHost": "WS_HOST",
     "wsReverseUrls": ["WS_URLS"],
