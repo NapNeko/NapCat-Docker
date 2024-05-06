@@ -15,7 +15,6 @@ RUN rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) && \
     unzip NapCat.linux.zip -d napcat && \
     mv ./napcat/NapCat.linux.${rarch}/* ./napcat/  && \
     rm NapCat.linux.zip && \
-    ln -s /usr/bin/ffmpeg ./ffmpeg && \
     chmod +x napcat/napcat.sh && \
     chmod +x entrypoint.sh
 
