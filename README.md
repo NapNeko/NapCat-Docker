@@ -43,6 +43,8 @@ services:
 ```
 
 ## 反向 WS
+<details>
+<summary>点我查看命令</summary>
 
 ```shell
 docker run -d \
@@ -68,7 +70,12 @@ services:
         restart: always
         image: mlikiowa/napcat-docker:latest
 ```
+</details>
+
 ## HTTP
+<details>
+<summary>点我查看命令</summary>
+
 ```shell
 docker run -d \
 -e ACCOUNT=<机器人qq> \
@@ -98,6 +105,8 @@ services:
         restart: always
         image: mlikiowa/napcat-docker:latest
 ```
+</details>
+
 # 登录
 
 ```shell
