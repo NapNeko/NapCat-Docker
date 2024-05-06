@@ -95,6 +95,30 @@ if [ ! -f "$CONFIG_PATH" ]; then
     else
         sed -i "s/MESSAGE_POST_FORMAT/array/" $CONFIG_PATH
     fi
+
+    if [ "$HTTP_HOST" ]; then
+        sed -i "s/HTTP_HOST/$HTTP_HOST/" $CONFIG_PATH
+    else
+        sed -i "s/HTTP_HOST//" $CONFIG_PATH
+    fi
+
+    if [ "$WS_HOST" ]; then
+        sed -i "s/WS_HOST/$WS_HOST/" $CONFIG_PATH
+    else
+        sed -i "s/WS_HOST//" $CONFIG_PATH
+    fi
+
+    if [ "$HTTP_HEART_ENABLE" ]; then
+        sed -i "s/HTTP_HEART_ENABLE/$HTTP_HEART_ENABLE/" $CONFIG_PATH
+    else
+        sed -i "s/HTTP_HEART_ENABLE/false/" $CONFIG_PATH
+    fi
+    
+    if [ "$MUSIC_SIGN_URL" ]; then
+        sed -i "s/MUSIC_SIGN_URL/$MUSIC_SIGN_URL/" $CONFIG_PATH
+    else
+        sed -i "s/MUSIC_SIGN_URL//" $CONFIG_PATH
+    fi
 fi
 
 export FFMPEG_PATH=/usr/bin/ffmpeg
