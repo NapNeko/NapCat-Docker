@@ -22,6 +22,7 @@ docker run -d \
 -e WS_ENABLE=true \
 -p 3001:3001 \
 --name napcat \
+--restart=always \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -37,6 +38,7 @@ services:
             - 3001:3001
         container_name: napcat
         network_mode: bridge
+        restart: always
         image: mlikiowa/napcat-docker:latest
 ```
 
@@ -48,6 +50,7 @@ docker run -d \
 -e WSR_ENABLE=true \
 -e WS_URLS="ws://192.168.3.8:5140/onebot" \
 --name napcat \
+--restart=always \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -62,6 +65,7 @@ services:
             - WS_URLS=ws://192.168.3.8:5140/onebot
         container_name: napcat
         network_mode: bridge
+        restart: always
         image: mlikiowa/napcat-docker:latest
 ```
 ## HTTP
@@ -73,6 +77,7 @@ docker run -d \
 -e HTTP_URLS="http://192.168.3.8:5140/onebot" \
 -p 3000:3000 \
 --name napcat \
+--restart=always \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -90,6 +95,7 @@ services:
             - 3000:3000
         container_name: napcat
         network_mode: bridge
+        restart: always
         image: mlikiowa/napcat-docker:latest
 ```
 # 登录
