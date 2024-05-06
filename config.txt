@@ -15,7 +15,7 @@
     "reportSelfMessage": RSM_ENABLE,
     "debug": DEBUG_ENABLE,
     "enableLocalFile2Url": F2U_ENABLE,
-    "heartInterval": HEART,
+    "heartInterval": HEART_INTERVAL,
     "musicSignUrl": "MUSIC_SIGN_URL",    
     "token": "TOKEN"
 }

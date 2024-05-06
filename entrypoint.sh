@@ -54,10 +54,10 @@ if [ ! -f "$CONFIG_PATH" ]; then
         sed -i "s/\"WS_URLS\"/\"\"/" $CONFIG_PATH
     fi
 
-    if [ "$HEART" ]; then
-        sed -i "s/HEART/$HEART/" $CONFIG_PATH
+    if [ "$HEART_INTERVAL" ]; then
+        sed -i "s/HEART_INTERVAL/$HEART_INTERVAL/" $CONFIG_PATH
     else
-        sed -i "s/HEART/60000/" $CONFIG_PATH
+        sed -i "s/HEART_INTERVAL/60000/" $CONFIG_PATH
     fi
 
     if [ "$TOKEN" ]; then
