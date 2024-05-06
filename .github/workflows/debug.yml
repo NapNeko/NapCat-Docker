@@ -32,7 +32,7 @@ jobs:
             --tag ${DOCKER_REPO}:$TAG \
             --tag ${DOCKER_REPO}:latest-test \
             --file ./Dockerfile \
-            ./docker
+            .
       - name: Docker Hub logout
         if: always()
         run: docker logout
