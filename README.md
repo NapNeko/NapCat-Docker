@@ -21,6 +21,7 @@ docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WS_ENABLE=true \
 -p 3001:3001 \
+-p 6099:6099 \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
@@ -67,6 +68,8 @@ services:
             - WS_URLS=ws://192.168.3.8:5140/onebot
         container_name: napcat
         network_mode: bridge
+        ports:
+           - 6099:6099
         restart: always
         image: mlikiowa/napcat-docker:latest
 ```
@@ -83,6 +86,7 @@ docker run -d \
 -e HTTP_POST_ENABLE=true \
 -e HTTP_URLS="http://192.168.3.8:5140/onebot" \
 -p 3000:3000 \
+-p 6099:6099 \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
@@ -100,6 +104,7 @@ services:
             - HTTP_URLS=http://192.168.3.8:5140/onebot
         ports:
             - 3000:3000
+            - 6099:6099
         container_name: napcat
         network_mode: bridge
         restart: always
