@@ -37,6 +37,7 @@ services:
             - WS_ENABLE=true
         ports:
             - 3001:3001
+            - 6099:6099
         container_name: napcat
         network_mode: bridge
         restart: always
