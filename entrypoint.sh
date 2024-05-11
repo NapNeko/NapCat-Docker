@@ -5,6 +5,10 @@ CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 if [ ! -f "$CONFIG_PATH" ]; then
     cp -f config.txt $CONFIG_PATH
 
+    
+    if [ "$WEBUI_TOKEN" ]; then
+        echo "{\"port\": 6099,\"token\": \"$WEBUI_TOKEN\",\"loginRate\": 3}" > napcat/config/webui.json
+    fi
 
     if [ "$HTTP_PORT" ]; then
         sed -i "s/HTTP_PORT/$HTTP_PORT/" $CONFIG_PATH
