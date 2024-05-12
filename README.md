@@ -15,8 +15,8 @@
 # 启动容器
 
 ```
-git clone https://github.com/NapNeko/NapCat-Docker.git \
-cd NapCat-Docker \
+git clone https://github.com/NapNeko/NapCat-Docker.git
+cd NapCat-Docker
 docker-compose up -d
 ```
 
