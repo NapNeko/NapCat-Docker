@@ -113,6 +113,12 @@ services:
 ```
 </details>
 
+# 固化路径，方便下次直接快速登录
+
+QQ 文档路径：~/.config/QQ
+
+NapCat 配置文件路径: /usr/src/app/napcat/config
+
 # 登录
 
 ```shell
