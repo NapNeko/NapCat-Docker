@@ -1,9 +1,11 @@
-version: "3"
+version: 3
 services:
     napcat:
         environment:
             - ACCOUNT=<机器人qq>
         ports:
+            - 3000:3000
+            - 3001:3001
             - 6099:6099
         volumes:
             - ~/napcat/QQ/:/root/.config/QQ/
