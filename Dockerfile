@@ -16,11 +16,5 @@ RUN rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) && \
     chmod +x napcat/napcat.sh && \
     chmod +x entrypoint.sh
 
-# 配置 supervisord
-RUN echo "[supervisord]" > /etc/supervisord.conf && \
-    echo "nodaemon=true" >> /etc/supervisord.conf && \
-    echo "[program:napcat]" >> /etc/supervisord.conf && \
-    echo "command=COMMAND" >> /etc/supervisord.conf
-
 ENTRYPOINT ["bash", "entrypoint.sh"]
 

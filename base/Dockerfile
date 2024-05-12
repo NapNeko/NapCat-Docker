@@ -21,8 +21,7 @@ RUN apt-get update && apt-get install -y \
     libx11-xcb1 \
     ffmpeg \
     unzip \
-    curl \
-    supervisor && \   
+    curl && \   
     apt autoremove -y && \
     apt clean && \
     rm -rf \
