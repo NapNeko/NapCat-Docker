@@ -1,5 +1,27 @@
 #!/bin/bash
 
+chech_quotes(){
+    local input="$1"
+    
+    if [[ $input =~ ^\".*\"$ ]]; then
+        echo "$input"
+    else
+        input=\""$input"\"
+        echo "$input"
+    fi
+}
+
+chech_square_brackets(){
+    local input="$1"
+    
+    if [[ $input =~ ^\[.*\]$ ]]; then
+        echo "$input"
+    else
+        input=[$input]
+        echo "$input"
+    fi
+}
+
 CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 # 容器首次启动时执行
 if [ ! -f "a$CONFIG_PATH" ]; then
@@ -27,6 +49,8 @@ if [ ! -f "a$CONFIG_PATH" ]; then
     : ${HTTP_HEART_ENABLE:='false'}
     : ${MUSIC_SIGN_URL:=''}
     : ${HTTP_SECRET:=''}
+    HTTP_URLS=$(chech_square_brackets $(chech_quotes $HTTP_URLS)
+    WS_URLS=$(chech_square_brackets $(chech_quotes $WS_URLS)
 cat <<EOF > $CONFIG_PATH
 {
     "httpHost": "$HTTP_HOST",
