@@ -2,29 +2,19 @@
 
 chech_quotes(){
     local input="$1"
-    
-    if [[ $input =~ ^\".*\"$ ]]; then
-        echo "$input"
+    if [ "${input:0:1}" != '"' ] ; then
+        if [ "${input:0:1}" != '[' ] ; then
+            input="[\"$input\"]"
+        fi
     else
-        input=\""$input"\"
-        echo "$input"
+        input="[$input]"
     fi
-}
-
-chech_square_brackets(){
-    local input="$1"
-    
-    if [[ $input =~ ^\[.*\]$ ]]; then
-        echo "$input"
-    else
-        input=[$input]
-        echo "$input"
-    fi
+    echo $input
 }
 
 CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 # 容器首次启动时执行
-if [ ! -f "a$CONFIG_PATH" ]; then
+if [ ! -f "$CONFIG_PATH" ]; then
     if [ "$WEBUI_TOKEN" ]; then
         echo "{\"port\": 6099,\"token\": \"$WEBUI_TOKEN\",\"loginRate\": 3}" > napcat/config/webui.json
     fi
@@ -49,8 +39,8 @@ if [ ! -f "a$CONFIG_PATH" ]; then
     : ${HTTP_HEART_ENABLE:='false'}
     : ${MUSIC_SIGN_URL:=''}
     : ${HTTP_SECRET:=''}
-    HTTP_URLS=$(chech_square_brackets $(chech_quotes $HTTP_URLS)
-    WS_URLS=$(chech_square_brackets $(chech_quotes $WS_URLS)
+    HTTP_URLS=$(chech_quotes $HTTP_URLS)
+    WS_URLS=$(chech_quotes $WS_URLS)
 cat <<EOF > $CONFIG_PATH
 {
     "httpHost": "$HTTP_HOST",

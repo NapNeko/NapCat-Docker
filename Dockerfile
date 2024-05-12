@@ -23,5 +23,5 @@ RUN echo "[supervisord]" > /etc/supervisord.conf && \
     echo "[program:napcat]" >> /etc/supervisord.conf && \
     echo "command=COMMAND" >> /etc/supervisord.conf
 
-ENTRYPOINT ["sh", "entrypoint.sh"]
+ENTRYPOINT ["bash", "entrypoint.sh"]
 

@@ -8,7 +8,7 @@
 
 ## 配置
 
-容器通过环境变量来配置，环境变量名称可以查看 [config.txt](./config.txt)
+容器通过环境变量来配置，环境变量名称可以查看 [entrypoint](./entrypoint.sh)👈
 
 具体参数可参考[官方文档](https://napneko.github.io/zh-CN/guide/getting-started)
 
@@ -46,7 +46,7 @@ services:
 
 ## 反向 WS
 <details>
-<summary>点我查看命令</summary>
+<summary>点我查看命令👈</summary>
 
 ```shell
 docker run -d \
@@ -78,7 +78,7 @@ services:
 
 ## HTTP
 <details>
-<summary>点我查看命令</summary>
+<summary>点我查看命令👈</summary>
 
 ```shell
 docker run -d \
