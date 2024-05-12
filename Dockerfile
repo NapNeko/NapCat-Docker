@@ -3,7 +3,7 @@ FROM mlikiowa/napcat-docker:base
 WORKDIR /usr/src/app
 
 COPY NapCat.linux.arm64.zip NapCat.linux.x64.zip .
-COPY config.txt entrypoint.sh ./
+COPY entrypoint.sh ./
 
 # 安装Linux QQ
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
