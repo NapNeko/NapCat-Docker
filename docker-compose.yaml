@@ -7,7 +7,7 @@ services:
             - 3001:3001
             - 6099:6099
         volumes:
-            - ~/napcat/QQ:/root/.config/QQ
+            - ~/napcat/QQ/:/root/.config/QQ/
             - ~/napcat/config/:/usr/src/app/napcat/config/
         container_name: napcat
         network_mode: bridge
