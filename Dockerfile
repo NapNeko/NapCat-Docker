@@ -16,5 +16,8 @@ RUN rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) && \
     chmod +x napcat/napcat.sh && \
     chmod +x entrypoint.sh
 
+VOLUME /usr/src/app/napcat/config
+VOLUME /root/.config/QQ
+
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
