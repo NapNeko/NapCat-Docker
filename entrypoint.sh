@@ -18,7 +18,7 @@ if [ ! -f "$CONFIG_PATH" ]; then
     # 安装 napcat
     rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
     unzip NapCat.linux.${rarch}.zip -d .
-    mv NapCat.linux.${rarch} napcat
+    mv NapCat.linux.${rarch}/* napcat/
     chmod +x napcat/napcat.sh
     
     if [ "$WEBUI_TOKEN" ]; then
