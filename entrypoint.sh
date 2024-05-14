@@ -17,7 +17,7 @@ CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 if [ ! -f "$CONFIG_PATH" ]; then
     # 安装 napcat
     rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
-    unzip NapCat.linux.${rarch}.zip -d .
+    unzip -q NapCat.linux.${rarch}.zip
     mv NapCat.linux.${rarch}/config/* napcat/config/ && rmdir NapCat.linux.${rarch}/config
     mv NapCat.linux.${rarch}/* napcat/
     chmod +x napcat/napcat.sh
