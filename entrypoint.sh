@@ -12,16 +12,18 @@ chech_quotes(){
     echo $input
 }
 
-CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
-# 容器首次启动时执行
-if [ ! -f "$CONFIG_PATH" ]; then
-    # 安装 napcat
+# 安装 napcat
+if [ ! -f "napcat/napcat.cjs" ]; then
     rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
     unzip -q NapCat.linux.${rarch}.zip
     mv NapCat.linux.${rarch}/config/* napcat/config/ && rmdir NapCat.linux.${rarch}/config
     mv NapCat.linux.${rarch}/* napcat/
     chmod +x napcat/napcat.sh
-    
+fi
+
+CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
+# 容器首次启动时执行
+if [ ! -f "$CONFIG_PATH" ]; then
     if [ "$WEBUI_TOKEN" ]; then
         echo "{\"port\": 6099,\"token\": \"$WEBUI_TOKEN\",\"loginRate\": 3}" > napcat/config/webui.json
     fi
