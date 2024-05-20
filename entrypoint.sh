@@ -58,7 +58,7 @@ cat <<EOF > $CONFIG_PATH
       "port": ${HTTP_PORT},
       "secret": "$HTTP_SECRET",
       "enableHeart": ${HTTP_HEART_ENABLE},
-      "enablePost": ${HTTP_POST_ENABLE},,
+      "enablePost": ${HTTP_POST_ENABLE},
       "postUrls": $HTTP_URLS
     },
     "ws": {
