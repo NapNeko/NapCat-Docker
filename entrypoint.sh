@@ -52,25 +52,31 @@ if [ ! -f "$CONFIG_PATH" ]; then
     WS_URLS=$(chech_quotes $WS_URLS)
 cat <<EOF > $CONFIG_PATH
 {
-    "httpHost": "$HTTP_HOST",
-    "enableHttp": ${HTTP_ENABLE},
-    "httpPort": ${HTTP_PORT},
-    "wsHost": "${WS_HOST}",
-    "enableWs": ${WS_ENABLE},
-    "wsPort": ${WS_PORT},
-    "enableWsReverse": ${WSR_ENABLE},
-    "wsReverseUrls": $WS_URLS,
-    "enableHttpPost": ${HTTP_POST_ENABLE},
-    "httpPostUrls": $HTTP_URLS,
-    "enableHttpHeart": ${HTTP_HEART_ENABLE},
-    "httpSecret": "$HTTP_SECRET",
-    "messagePostFormat": "$MESSAGE_POST_FORMAT",
-    "reportSelfMessage": ${RSM_ENABLE},
+    "http": {
+      "enable": ${HTTP_ENABLE},
+      "host": "$HTTP_HOST",
+      "port": ${HTTP_PORT},
+      "secret": "$HTTP_SECRET",
+      "enableHeart": ${HTTP_HEART_ENABLE},
+      "enablePost": ${HTTP_POST_ENABLE},,
+      "postUrls": $HTTP_URLS
+    },
+    "ws": {
+      "enable": ${WS_ENABLE},
+      "host": "${WS_HOST}",
+      "port": ${WS_PORT}
+    },
+    "reverseWs": {
+      "enable": ${WSR_ENABLE},
+      "urls": $WS_URLS
+    },
     "debug": ${DEBUG_ENABLE},
-    "enableLocalFile2Url": ${F2U_ENABLE},
     "heartInterval": ${HEART_INTERVAL},
-    "token": "$TOKEN",
-    "musicSignUrl": "$MUSIC_SIGN_URL"
+    "messagePostFormat": "$MESSAGE_POST_FORMAT",
+    "enableLocalFile2Url": ${F2U_ENABLE},
+    "musicSignUrl": "$MUSIC_SIGN_URL",
+    "reportSelfMessage": ${RSM_ENABLE},
+    "token": "$TOKEN"
 }
 EOF
 fi
