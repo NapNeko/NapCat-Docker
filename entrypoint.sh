@@ -13,7 +13,7 @@ chech_quotes(){
 }
 
 # 安装 napcat
-if [ ! -f "napcat/napcat.cjs" ]; then
+if [ ! -f "napcat/napcat.mjs" ]; then
     rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
     unzip -q NapCat.linux.${rarch}.zip
     mv NapCat.linux.${rarch}/config/* napcat/config/ && rmdir NapCat.linux.${rarch}/config
