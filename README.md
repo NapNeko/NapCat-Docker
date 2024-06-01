@@ -119,6 +119,8 @@ QQ 文档路径：~/.config/QQ
 
 NapCat 配置文件路径: /usr/src/app/napcat/config
 
+注意：如果是重新创建的容器，需要固定 Mac 地址
+
 # 登录
 
 ```shell
