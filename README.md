@@ -126,3 +126,10 @@ NapCat 配置文件路径: /usr/src/app/napcat/config
 ```shell
 docker logs napcat
 ```
+
+# Tips
+
+- 若 Docker 镜像拉取失败，可以使用 [Docker 镜像加速服务](https://github.com/dqzboy/Docker-Proxy) 
+```shell
+docker pull hub-latest-3q02.onrender.com/mlikiowa/napcat-docker
+```
