@@ -1,8 +1,8 @@
 FROM mlikiowa/napcat-docker:base
 
 WORKDIR /usr/src/app
-RUN wget https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.linux.x64.zip && \
-    wget https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.linux.arm64.zip
+RUN curl https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.linux.x64.zip && \
+    curl https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.linux.arm64.zip
 
 #COPY NapCat.linux.arm64.zip NapCat.linux.x64.zip entrypoint.sh .
 COPY entrypoint.sh .
