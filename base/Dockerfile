@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     libnotify4 \
     libsecret-1-0 \
     libgbm1 \
+     xvfb \
     libasound2 \
     fonts-wqy-zenhei \
     gnutls-bin \ 
