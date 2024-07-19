@@ -89,4 +89,4 @@ Xvfb :1 -screen 0 1080x760x16 +extension GLX +render &
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
 cd ./napcat
-qq --no-sandbox --disable-gpu --headless -q $ACCOUNT
+qq --no-sandbox -q $ACCOUNT
