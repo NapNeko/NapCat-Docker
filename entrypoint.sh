@@ -83,5 +83,6 @@ fi
 
 Xvfb :1 -screen 0 1080x760x16 &
 export FFMPEG_PATH=/usr/bin/ffmpeg
+export  DISPLAY=:1
 cd ./napcat
 qq --no-sandbox --enable-logging -q $ACCOUNT
