@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     libx11-xcb1 \
     ffmpeg \
     unzip \
+    dbus-user-session \
     curl && \   
     apt autoremove -y && \
     apt clean && \
