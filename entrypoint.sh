@@ -81,6 +81,7 @@ cat <<EOF > $CONFIG_PATH
 EOF
 fi
 
+Xvfb :1 -screen 0 1080x760x16 &
 export FFMPEG_PATH=/usr/bin/ffmpeg
 cd ./napcat
-./napcat.sh -q $ACCOUNT
+qq --no-sanbox --enable-logging -q $ACCOUNT
