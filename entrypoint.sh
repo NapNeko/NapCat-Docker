@@ -80,6 +80,14 @@ cat <<EOF > $CONFIG_PATH
 }
 EOF
 fi
+FILE="/tmp/.X1-lock"
+
+if [ -e "$FILE" ]; then
+    rm -rf "$FILE"
+    echo "$FILE has been deleted."
+else
+    echo "$FILE does not exist."
+fi
 
 chmod 777 /tmp &
 rm -rf /run/dbus/pid &
