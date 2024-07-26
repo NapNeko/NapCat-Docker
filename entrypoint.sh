@@ -73,7 +73,7 @@ cat <<EOF > $CONFIG_PATH
     "GroupLocalTime":{
     Record: false,
     RecordList: []
-    }
+    },
     "debug": ${DEBUG_ENABLE},
     "heartInterval": ${HEART_INTERVAL},
     "messagePostFormat": "$MESSAGE_POST_FORMAT",
