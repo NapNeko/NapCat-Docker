@@ -70,6 +70,10 @@ cat <<EOF > $CONFIG_PATH
       "enable": ${WSR_ENABLE},
       "urls": $WS_URLS
     },
+    "GroupLocalTime":{
+    Record: false,
+    RecordList: []
+    }
     "debug": ${DEBUG_ENABLE},
     "heartInterval": ${HEART_INTERVAL},
     "messagePostFormat": "$MESSAGE_POST_FORMAT",
