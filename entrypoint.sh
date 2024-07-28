@@ -71,8 +71,8 @@ cat <<EOF > $CONFIG_PATH
       "urls": $WS_URLS
     },
     "GroupLocalTime":{
-    Record: false,
-    RecordList: []
+      "Record": false,
+      "RecordList": []
     },
     "debug": ${DEBUG_ENABLE},
     "heartInterval": ${HEART_INTERVAL},
