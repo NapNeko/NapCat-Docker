@@ -93,10 +93,6 @@ else
     echo "$FILE does not exist."
 fi
 
-chmod 777 /tmp &
-rm -rf /run/dbus/pid &
-mkdir -p /var/run/dbus &
-dbus-daemon --config-file=/usr/share/dbus-1/system.conf --print-address &
 Xvfb :1 -screen 0 1080x760x16 +extension GLX +render &
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
