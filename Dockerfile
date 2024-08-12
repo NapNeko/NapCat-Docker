@@ -2,7 +2,7 @@ FROM mlikiowa/napcat-docker:base
 
 WORKDIR /usr/src/app
 
-COPY NapCat.linux.arm64.zip NapCat.linux.x64.zip entrypoint.sh .
+COPY NapCat.Shell.zip entrypoint.sh .
 
 # 设置时区
 ENV TZ=Asia/Shanghai 
