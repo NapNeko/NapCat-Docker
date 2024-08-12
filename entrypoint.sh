@@ -14,11 +14,9 @@ chech_quotes(){
 
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ]; then
-    rarch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/)
-    unzip -q NapCat.linux.${rarch}.zip
-    mv NapCat.linux.${rarch}/config/* napcat/config/ && rmdir NapCat.linux.${rarch}/config
-    mv NapCat.linux.${rarch}/* napcat/
-    chmod +x napcat/napcat.sh
+    unzip -q NapCat.Shell.zip
+    mv NapCat.Shell/config/* napcat/config/ && rmdir NapCat.Shell/config
+    mv NapCat.Shell/* napcat/
 fi
 
 CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
