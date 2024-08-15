@@ -14,7 +14,7 @@ chech_quotes(){
 
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ]; then
-    unzip -q NapCat.Shell.zip
+    unzip -q NapCat.Shell.zip -d ./NapCat.Shell
     mv NapCat.Shell/config/* napcat/config/ && rmdir NapCat.Shell/config
     mv NapCat.Shell/* napcat/
 fi
