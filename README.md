@@ -8,7 +8,7 @@
 
 ## 配置
 
-容器通过环境变量来配置，环境变量名称可以查看 [config.txt](./config.txt)
+容器通过环境变量来配置，环境变量名称可以查看 [entrypoint](./entrypoint.sh)👈
 
 具体参数可参考[官方文档](https://napneko.github.io/zh-CN/guide/getting-started)
 
@@ -52,13 +52,13 @@ services:
 
 ## 反向 WS
 <details>
-<summary>点我查看命令</summary>
+<summary>点我查看命令👈</summary>
 
 ```shell
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WSR_ENABLE=true \
--e WS_URLS="ws://192.168.3.8:5140/onebot" \
+-e WS_URLS='["ws://192.168.3.8:5140/onebot"]' \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
@@ -72,7 +72,7 @@ services:
         environment:
             - ACCOUNT=<机器人qq>
             - WSR_ENABLE=true
-            - WS_URLS=ws://192.168.3.8:5140/onebot
+            - WS_URLS=["ws://192.168.3.8:5140/onebot"]
         container_name: napcat
         network_mode: bridge
         ports:
@@ -84,14 +84,14 @@ services:
 
 ## HTTP
 <details>
-<summary>点我查看命令</summary>
+<summary>点我查看命令👈</summary>
 
 ```shell
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e HTTP_ENABLE=true \
 -e HTTP_POST_ENABLE=true \
--e HTTP_URLS="http://192.168.3.8:5140/onebot" \
+-e HTTP_URLS='["http://192.168.3.8:5140/onebot"]' \
 -p 3000:3000 \
 -p 6099:6099 \
 --name napcat \
@@ -108,7 +108,7 @@ services:
             - ACCOUNT=<机器人qq>
             - HTTP_ENABLE=true
             - HTTP_POST_ENABLE=true
-            - HTTP_URLS=http://192.168.3.8:5140/onebot
+            - HTTP_URLS=["http://192.168.3.8:5140/onebot"]
         ports:
             - 3000:3000
             - 6099:6099
@@ -119,8 +119,20 @@ services:
 ```
 </details>
 
+# 固化路径，方便下次直接快速登录
+
+QQ 文档路径：~/.config/QQ
+
+NapCat 配置文件路径: /usr/src/app/napcat/config
+
+注意：如果是重新创建的容器，需要固定 Mac 地址
+
 # 登录
 
 ```shell
 docker logs napcat
 ```
+
+# Tips
+
+- 若 Docker 镜像拉取失败，可以使用 [Docker 镜像加速服务](https://github.com/dqzboy/Docker-Proxy) 

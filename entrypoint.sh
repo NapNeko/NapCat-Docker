@@ -1,135 +1,98 @@
 #!/bin/bash
 
+chech_quotes(){
+    local input="$1"
+    if [ "${input:0:1}" != '"' ] ; then
+        if [ "${input:0:1}" != '[' ] ; then
+            input="[\"$input\"]"
+        fi
+    else
+        input="[$input]"
+    fi
+    echo $input
+}
+
+# 安装 napcat
+if [ ! -f "napcat/napcat.mjs" ]; then
+    unzip -q NapCat.Shell.zip -d ./NapCat.Shell
+    mv NapCat.Shell/config/* napcat/config/ && rmdir NapCat.Shell/config
+    mv NapCat.Shell/* napcat/
+fi
+
 CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 # 容器首次启动时执行
 if [ ! -f "$CONFIG_PATH" ]; then
-    cp -f config.txt $CONFIG_PATH
-
-    
     if [ "$WEBUI_TOKEN" ]; then
         echo "{\"port\": 6099,\"token\": \"$WEBUI_TOKEN\",\"loginRate\": 3}" > napcat/config/webui.json
     fi
+    : ${WEBUI_TOKEN:=''}
+    : ${HTTP_PORT:=3000}
+    : ${HTTP_URLS:='[]'}
+    : ${WS_PORT:=3001}
+    : ${HTTP_ENABLE:='false'}
+    : ${HTTP_POST_ENABLE:='false'}
+    : ${WS_ENABLE:='false'}
+    : ${WSR_ENABLE:='false'}
+    : ${WS_URLS:='[]'}
+    : ${HEART_INTERVAL:=60000}
+    : ${TOKEN:=''}
+    : ${F2U_ENABLE:='false'}
+    : ${DEBUG_ENABLE:='false'}
+    : ${LOG_ENABLE:='false'}
+    : ${RSM_ENABLE:='false'}
+    : ${MESSAGE_POST_FORMAT:='array'}
+    : ${HTTP_HOST:=''}
+    : ${WS_HOST:=''}
+    : ${HTTP_HEART_ENABLE:='false'}
+    : ${MUSIC_SIGN_URL:=''}
+    : ${HTTP_SECRET:=''}
+    HTTP_URLS=$(chech_quotes $HTTP_URLS)
+    WS_URLS=$(chech_quotes $WS_URLS)
+cat <<EOF > $CONFIG_PATH
+{
+    "http": {
+      "enable": ${HTTP_ENABLE},
+      "host": "$HTTP_HOST",
+      "port": ${HTTP_PORT},
+      "secret": "$HTTP_SECRET",
+      "enableHeart": ${HTTP_HEART_ENABLE},
+      "enablePost": ${HTTP_POST_ENABLE},
+      "postUrls": $HTTP_URLS
+    },
+    "ws": {
+      "enable": ${WS_ENABLE},
+      "host": "${WS_HOST}",
+      "port": ${WS_PORT}
+    },
+    "reverseWs": {
+      "enable": ${WSR_ENABLE},
+      "urls": $WS_URLS
+    },
+    "GroupLocalTime":{
+      "Record": false,
+      "RecordList": []
+    },
+    "debug": ${DEBUG_ENABLE},
+    "heartInterval": ${HEART_INTERVAL},
+    "messagePostFormat": "$MESSAGE_POST_FORMAT",
+    "enableLocalFile2Url": ${F2U_ENABLE},
+    "musicSignUrl": "$MUSIC_SIGN_URL",
+    "reportSelfMessage": ${RSM_ENABLE},
+    "token": "$TOKEN"
+}
+EOF
+fi
+FILE="/tmp/.X1-lock"
 
-    if [ "$HTTP_PORT" ]; then
-        sed -i "s/HTTP_PORT/$HTTP_PORT/" $CONFIG_PATH
-    else
-        sed -i "s/HTTP_PORT/3000/" $CONFIG_PATH
-    fi
-
-    if [ "$HTTP_URLS" ]; then
-        sed -i "s|HTTP_URLS|$HTTP_URLS|" $CONFIG_PATH
-    else
-        sed -i "s/\"HTTP_URLS\"/\"\"/" $CONFIG_PATH
-    fi
-
-    if [ "$WS_PORT" ]; then
-        sed -i "s/WS_PORT/$WS_PORT/" $CONFIG_PATH
-    else
-        sed -i "s/WS_PORT/3001/" $CONFIG_PATH
-    fi
-
-    if [ "$HTTP_ENABLE" ]; then
-        sed -i "s/HTTP_ENABLE/$HTTP_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/HTTP_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$HTTP_POST_ENABLE" ]; then
-        sed -i "s/HTTP_POST_ENABLE/$HTTP_POST_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/HTTP_POST_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$WS_ENABLE" ]; then
-        sed -i "s/WS_ENABLE/$WS_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/WS_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$WSR_ENABLE" ]; then
-        sed -i "s/WSR_ENABLE/$WSR_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/WSR_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$WS_URLS" ]; then
-        sed -i "s#WS_URLS#$WS_URLS#" $CONFIG_PATH
-    else
-        sed -i "s/\"WS_URLS\"/\"\"/" $CONFIG_PATH
-    fi
-
-    if [ "$HEART_INTERVAL" ]; then
-        sed -i "s/HEART_INTERVAL/$HEART_INTERVAL/" $CONFIG_PATH
-    else
-        sed -i "s/HEART_INTERVAL/60000/" $CONFIG_PATH
-    fi
-
-    if [ "$TOKEN" ]; then
-        sed -i "s|TOKEN|$TOKEN|" $CONFIG_PATH
-    else
-        sed -i "s/\"TOKEN\"/\"\"/" $CONFIG_PATH
-    fi
-
-    if [ "$F2U_ENABLE" ]; then
-        sed -i "s/F2U_ENABLE/$F2U_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/F2U_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$DEBUG_ENABLE" ]; then
-        sed -i "s/DEBUG_ENABLE/$DEBUG_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/DEBUG_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$LOG_ENABLE" ]; then
-        sed -i "s/LOG_ENABLE/$LOG_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/LOG_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$RSM_ENABLE" ]; then
-        sed -i "s/RSM_ENABLE/$RSM_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/RSM_ENABLE/false/" $CONFIG_PATH
-    fi
-
-    if [ "$MESSAGE_POST_FORMAT" ]; then
-        sed -i "s/MESSAGE_POST_FORMAT/$MESSAGE_POST_FORMAT/" $CONFIG_PATH
-    else
-        sed -i "s/MESSAGE_POST_FORMAT/array/" $CONFIG_PATH
-    fi
-
-    if [ "$HTTP_HOST" ]; then
-        sed -i "s/HTTP_HOST/$HTTP_HOST/" $CONFIG_PATH
-    else
-        sed -i "s/HTTP_HOST//" $CONFIG_PATH
-    fi
-
-    if [ "$WS_HOST" ]; then
-        sed -i "s/WS_HOST/$WS_HOST/" $CONFIG_PATH
-    else
-        sed -i "s/WS_HOST//" $CONFIG_PATH
-    fi
-
-    if [ "$HTTP_HEART_ENABLE" ]; then
-        sed -i "s/HTTP_HEART_ENABLE/$HTTP_HEART_ENABLE/" $CONFIG_PATH
-    else
-        sed -i "s/HTTP_HEART_ENABLE/false/" $CONFIG_PATH
-    fi
-    
-    if [ "$MUSIC_SIGN_URL" ]; then
-        sed -i "s/MUSIC_SIGN_URL/$MUSIC_SIGN_URL/" $CONFIG_PATH
-    else
-        sed -i "s/MUSIC_SIGN_URL//" $CONFIG_PATH
-    fi
-    if [ "$HTTP_SECRET" ]; then
-        sed -i "s/HTTP_SECRET/$HTTP_SECRET/" $CONFIG_PATH
-    else
-        sed -i "s/HTTP_SECRET//" $CONFIG_PATH
-    fi
+if [ -e "$FILE" ]; then
+    rm -rf "$FILE"
+    echo "$FILE has been deleted."
+else
+    echo "$FILE does not exist."
 fi
 
+Xvfb :1 -screen 0 1080x760x16 +extension GLX +render &
 export FFMPEG_PATH=/usr/bin/ffmpeg
+export DISPLAY=:1
 cd ./napcat
-./napcat.sh -q $ACCOUNT
+qq --no-sandbox -q $ACCOUNT
