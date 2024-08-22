@@ -115,9 +115,9 @@ services:
 
 # 固化路径，方便下次直接快速登录
 
-QQ 文档路径：~/.config/QQ
+QQ 持久化数据路径：/app/.config/QQ
 
-NapCat 配置文件路径: /usr/src/app/napcat/config
+NapCat 配置文件路径: /app/napcat/config
 
 注意：如果是重新创建的容器，需要固定 Mac 地址
 
