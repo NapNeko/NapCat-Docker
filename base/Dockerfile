@@ -1,18 +1,19 @@
 FROM ubuntu:22.04
 
 # 设置环境变量
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive \
+    TZ=Asia/Shanghai
 
 # 安装必要的软件包
 RUN apt-get update && apt-get install -y \
-    libnss3 \   
+    libnss3 \
     libnotify4 \
     libsecret-1-0 \
     libgbm1 \
     xvfb \
     libasound2 \
     fonts-wqy-zenhei \
-    gnutls-bin \ 
+    gnutls-bin \
     libglib2.0-dev \
     libdbus-1-3 \
     libgtk-3-0 \
@@ -23,7 +24,11 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     unzip \
     dbus-user-session \
-    curl && \   
+    curl \
+    gosu \
+    tzdata && \
+    echo "${TZ}" > /etc/timezone && \ 
+    ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
     apt autoremove -y && \
     apt clean && \
     rm -rf \
