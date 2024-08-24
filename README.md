@@ -20,29 +20,16 @@
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WS_ENABLE=true \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -p 3001:3001 \
 -p 6099:6099 \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
 ```
+[docker compose 正向 WS](./docker-compose/ws)
 
-```yaml
-# docker compose 正向 WS
-version: "3"
-services:
-    napcat:
-        environment:
-            - ACCOUNT=<机器人qq>
-            - WS_ENABLE=true
-        ports:
-            - 3001:3001
-            - 6099:6099
-        container_name: napcat
-        network_mode: bridge
-        restart: always
-        image: mlikiowa/napcat-docker:latest
-```
 
 ## 反向 WS
 <details>
@@ -52,28 +39,17 @@ services:
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WSR_ENABLE=true \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -e WS_URLS='["ws://192.168.3.8:5140/onebot"]' \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
 ```
 
-```yaml
-# docker compose 反向 WS
-version: "3"
-services:
-    napcat:
-        environment:
-            - ACCOUNT=<机器人qq>
-            - WSR_ENABLE=true
-            - WS_URLS=["ws://192.168.3.8:5140/onebot"]
-        container_name: napcat
-        network_mode: bridge
-        ports:
-           - 6099:6099
-        restart: always
-        image: mlikiowa/napcat-docker:latest
-```
+[docker compose 反向 WS](./docker-compose/we-reverse)
+
+
 </details>
 
 ## HTTP
@@ -85,6 +61,8 @@ docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e HTTP_ENABLE=true \
 -e HTTP_POST_ENABLE=true \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -e HTTP_URLS='["http://192.168.3.8:5140/onebot"]' \
 -p 3000:3000 \
 -p 6099:6099 \
@@ -93,24 +71,8 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
-```yaml
-# docker compose HTTP POST
-version: "3"
-services:
-    napcat:
-        environment:
-            - ACCOUNT=<机器人qq>
-            - HTTP_ENABLE=true
-            - HTTP_POST_ENABLE=true
-            - HTTP_URLS=["http://192.168.3.8:5140/onebot"]
-        ports:
-            - 3000:3000
-            - 6099:6099
-        container_name: napcat
-        network_mode: bridge
-        restart: always
-        image: mlikiowa/napcat-docker:latest
-```
+[docker compose HTTP POST](./docker-compose/http)
+
 </details>
 
 # 固化路径，方便下次直接快速登录
