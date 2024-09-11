@@ -22,10 +22,14 @@ docker-compose up -d
 
 ## 正向 WS
 
+### 命令行运行
+
 ```shell
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WS_ENABLE=true \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -p 3001:3001 \
 -p 6099:6099 \
 --name napcat \
@@ -33,14 +37,19 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
+### docker-compose 运行
+
+创建 `docker-compose.yml` 文件
 ```yaml
-# docker compose 正向 WS
+# docker-compose.yml
 version: "3"
 services:
     napcat:
         environment:
             - ACCOUNT=<机器人qq>
             - WS_ENABLE=true
+            - NAPCAT_UID=${NAPCAT_UID}
+            - NAPCAT_GID=${NAPCAT_GID}
         ports:
             - 3001:3001
             - 6099:6099
@@ -50,22 +59,30 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
+使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
+
 ## 反向 WS
 <details>
 <summary>点我查看命令👈</summary>
+
+### 命令行运行
 
 ```shell
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WSR_ENABLE=true \
 -e WS_URLS='["ws://192.168.3.8:5140/onebot"]' \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
 ```
+### docker-compose 运行
 
+按照 [正向 WS](#docker-compose-运行) 中的方式创建 `.env` 文件，然后创建 `docker-compose.yml` 文件
 ```yaml
-# docker compose 反向 WS
+# docker-compose.yml
 version: "3"
 services:
     napcat:
@@ -73,6 +90,8 @@ services:
             - ACCOUNT=<机器人qq>
             - WSR_ENABLE=true
             - WS_URLS=["ws://192.168.3.8:5140/onebot"]
+            - NAPCAT_UID=${NAPCAT_UID}
+            - NAPCAT_GID=${NAPCAT_GID}
         container_name: napcat
         network_mode: bridge
         ports:
@@ -80,11 +99,15 @@ services:
         restart: always
         image: mlikiowa/napcat-docker:latest
 ```
+
+使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
 </details>
 
 ## HTTP
 <details>
 <summary>点我查看命令👈</summary>
+
+### 命令行运行
 
 ```shell
 docker run -d \
@@ -92,6 +115,8 @@ docker run -d \
 -e HTTP_ENABLE=true \
 -e HTTP_POST_ENABLE=true \
 -e HTTP_URLS='["http://192.168.3.8:5140/onebot"]' \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -p 3000:3000 \
 -p 6099:6099 \
 --name napcat \
@@ -99,8 +124,11 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
+### docker-compose 运行
+
+按照 [正向 WS](#docker-compose-运行) 中的方式创建 `.env` 文件，然后创建 `docker-compose.yml` 文件
 ```yaml
-# docker compose HTTP POST
+# docker-compose.yml
 version: "3"
 services:
     napcat:
@@ -109,6 +137,8 @@ services:
             - HTTP_ENABLE=true
             - HTTP_POST_ENABLE=true
             - HTTP_URLS=["http://192.168.3.8:5140/onebot"]
+            - NAPCAT_UID=${NAPCAT_UID}
+            - NAPCAT_GID=${NAPCAT_GID}
         ports:
             - 3000:3000
             - 6099:6099
@@ -117,13 +147,15 @@ services:
         restart: always
         image: mlikiowa/napcat-docker:latest
 ```
+
+使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
 </details>
 
 # 固化路径，方便下次直接快速登录
 
-QQ 文档路径：~/.config/QQ
+QQ 持久化数据路径：/app/.config/QQ
 
-NapCat 配置文件路径: /usr/src/app/napcat/config
+NapCat 配置文件路径: /app/napcat/config
 
 注意：如果是重新创建的容器，需要固定 Mac 地址
 

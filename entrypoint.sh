@@ -46,6 +46,8 @@ if [ ! -f "$CONFIG_PATH" ]; then
     : ${HTTP_HEART_ENABLE:='false'}
     : ${MUSIC_SIGN_URL:=''}
     : ${HTTP_SECRET:=''}
+    : ${NAPCAT_GID:=1001}
+    : ${NAPCAT_UID:=911}
     HTTP_URLS=$(chech_quotes $HTTP_URLS)
     WS_URLS=$(chech_quotes $WS_URLS)
 cat <<EOF > $CONFIG_PATH
@@ -82,17 +84,16 @@ cat <<EOF > $CONFIG_PATH
 }
 EOF
 fi
-FILE="/tmp/.X1-lock"
+rm -rf "/tmp/.X1-lock"
 
-if [ -e "$FILE" ]; then
-    rm -rf "$FILE"
-    echo "$FILE has been deleted."
-else
-    echo "$FILE does not exist."
-fi
+usermod -o -u ${NAPCAT_UID} napcat
+groupmod -o -g ${NAPCAT_GID} napcat
+usermod -g ${NAPCAT_GID} napcat
+chown -R ${NAPCAT_UID}:${NAPCAT_GID} /app
 
-Xvfb :1 -screen 0 1080x760x16 +extension GLX +render &
+gosu napcat Xvfb :1 -screen 0 1080x760x16 +extension GLX +render &
+sleep 2
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
-cd ./napcat
-qq --no-sandbox -q $ACCOUNT
+cd /app/napcat
+gosu napcat /opt/QQ/qq --no-sandbox -q $ACCOUNT
