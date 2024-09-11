@@ -22,10 +22,11 @@ fi
 CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
 # 容器首次启动时执行
 if [ ! -f "$CONFIG_PATH" ]; then
-    if [ "$WEBUI_TOKEN" ]; then
-        echo "{\"port\": 6099,\"token\": \"$WEBUI_TOKEN\",\"loginRate\": 3}" > napcat/config/webui.json
-    fi
-    : ${WEBUI_TOKEN:=''}
+    : ${WEBUI_HOST:="0.0.0.0"}
+    : ${WEBUI_PORT:=6099}
+    : ${WEBUI_PREFIX:=""}
+    : ${WEBUI_TOKEN:=""}
+    : ${WEBUI_LOGIN_RATE:=3}
     : ${HTTP_PORT:=3000}
     : ${HTTP_URLS:='[]'}
     : ${WS_PORT:=3001}
@@ -81,6 +82,19 @@ cat <<EOF > $CONFIG_PATH
     "musicSignUrl": "$MUSIC_SIGN_URL",
     "reportSelfMessage": ${RSM_ENABLE},
     "token": "$TOKEN"
+}
+EOF
+fi
+#支持重建
+WEBUI_PATH="napcat/config/webui.json"
+if [ "$WEBUI_HOST" ] || [ "$WEBUI_PORT" ] || [ "$WEBUI_PREFIX" ] || [ "$WEBUI_TOKEN" ] || [ "$WEBUI_LOGIN_RATE" ]; then
+cat <<EOF > "$WEBUI_PATH"
+{
+    "host": "$WEBUI_HOST",
+    "port": $WEBUI_PORT,
+    "prefix": "$WEBUI_PREFIX",
+    "token": "$WEBUI_TOKEN",
+    "loginRate": $WEBUI_LOGIN_RATE
 }
 EOF
 fi
