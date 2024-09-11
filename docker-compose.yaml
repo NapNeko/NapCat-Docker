@@ -1,0 +1,16 @@
+version: "3"
+services:
+    napcat:
+        environment:
+            - ACCOUNT=<机器人qq>
+        ports:
+            - 3000:3000
+            - 3001:3001
+            - 6099:6099
+        volumes:
+            - ~/napcat/QQ/:/root/.config/QQ/
+            - ~/napcat/config/:/usr/src/app/napcat/config/
+        container_name: napcat
+        network_mode: bridge
+        restart: always
+        image: mlikiowa/napcat-docker:latest
