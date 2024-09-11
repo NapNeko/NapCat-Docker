@@ -85,6 +85,7 @@ cat <<EOF > $CONFIG_PATH
 }
 EOF
 fi
+
 #支持重建
 WEBUI_PATH="napcat/config/webui.json"
 if [ "$WEBUI_HOST" ] || [ "$WEBUI_PORT" ] || [ "$WEBUI_PREFIX" ] || [ "$WEBUI_TOKEN" ] || [ "$WEBUI_LOGIN_RATE" ]; then
