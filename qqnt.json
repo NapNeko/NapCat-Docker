@@ -1,0 +1,21 @@
+{
+  "name": "QQ",
+  "version": "3.2.12-28060",
+  "private": true,
+  "description": "QQ",
+  "productName": "QQ",
+  "author": {
+    "name": "Tencent",
+    "email": "QQ-Team@tencent.com"
+  },
+  "homepage": "https://im.qq.com",
+  "sideEffects": true,
+  "bin": {
+    "qd": "externals/devtools/cli/index.js"
+  },
+  "main": "./index.js",
+  "buildVersion": "28060",
+  "platform": "linux",
+  "eleArch": "x64",
+  "linuxFormat": "deb"
+}
