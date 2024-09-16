@@ -13,7 +13,7 @@
   "bin": {
     "qd": "externals/devtools/cli/index.js"
   },
-  "main": "./index.js",
+  "main": "./loadNapCat.js",
   "buildVersion": "28060",
   "platform": "linux",
   "eleArch": "x64",
