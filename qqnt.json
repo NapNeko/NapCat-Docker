@@ -1,6 +1,6 @@
 {
   "name": "QQ",
-  "version": "3.2.12-28060",
+  "version": "3.2.12-28327",
   "private": true,
   "description": "QQ",
   "productName": "QQ",
@@ -14,7 +14,7 @@
     "qd": "externals/devtools/cli/index.js"
   },
   "main": "./loadNapCat.js",
-  "buildVersion": "28060",
+  "buildVersion": "28327",
   "platform": "linux",
   "eleArch": "x64",
   "linuxFormat": "deb"
