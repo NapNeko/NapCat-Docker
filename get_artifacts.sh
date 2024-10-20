@@ -10,6 +10,11 @@ curl -s -X GET \
     -H "Authorization: token $token" \
     -L "https://github.com/NapNeko/NapCatQQ/releases/download/$version/NapCat.Shell.zip" \
     -o "$output_dir/NapCat.Shell.zip"
+# 下载packet-server
+curl -s -X GET \
+    -H "Authorization: token $token" \
+    -L "https://github.com/NapNeko/NapCatQQ/releases/download/v3.0.0/napcat.packet.linux" \
+    -o "$output_dir/napcat.packet.linux"
 
 echo "编译产物已保存到$output_dir"
 ls -lh
