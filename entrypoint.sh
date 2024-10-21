@@ -105,7 +105,7 @@ sleep 2
 # 方便调试, 或许应该重定向到/dev/null?
 if [ "$(arch)" = "x86_64" ]; then
     cd /app/napcat.packet/
-    gosu napcat /app/napcat.packet/napcat.packet.linux 2>&1 &
+    /app/napcat.packet/napcat.packet.linux 2>&1 &
     sleep 2
 fi
 export FFMPEG_PATH=/usr/bin/ffmpeg
