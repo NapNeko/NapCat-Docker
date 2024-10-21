@@ -15,8 +15,13 @@ chech_quotes(){
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ]; then
     unzip -q NapCat.Shell.zip -d ./NapCat.Shell
-    mv NapCat.Shell/config/* napcat/config/ && rmdir NapCat.Shell/config
-    mv NapCat.Shell/* napcat/
+    cp -rf NapCat.Shell/* napcat/
+    rm -rf ./NapCat.Shell
+fi
+if [ ! -f "napcat/config/napcat.json" ]; then
+    unzip -q NapCat.Shell.zip -d ./NapCat.Shell
+    cp -rf NapCat.Shell/config/* napcat/config/
+    rm -rf ./NapCat.Shell
 fi
 
 CONFIG_PATH=napcat/config/onebot11_$ACCOUNT.json
@@ -85,6 +90,7 @@ cat <<EOF > $CONFIG_PATH
 EOF
     if [ "$(arch)" = "x86_64" ]; then
         jq '.packetServer = "127.0.0.1:8086"' napcat/config/napcat.json > napcat/config/napcat._json && mv napcat/config/napcat._json napcat/config/napcat.json
+        cp -f napcat/config/napcat.json napcat/config/napcat_$ACCOUNT.json
     fi
 fi
 rm -rf "/tmp/.X1-lock"
