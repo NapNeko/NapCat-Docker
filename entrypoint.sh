@@ -88,10 +88,8 @@ cat <<EOF > $CONFIG_PATH
     "token": "$TOKEN"
 }
 EOF
-    if [ "$(arch)" = "x86_64" ]; then
-        jq '.packetServer = "127.0.0.1:8086"' napcat/config/napcat.json > napcat/config/napcat._json && mv napcat/config/napcat._json napcat/config/napcat.json
-        cp -f napcat/config/napcat.json napcat/config/napcat_$ACCOUNT.json
-    fi
+    jq '.packetServer = "127.0.0.1:8086"' napcat/config/napcat.json > napcat/config/napcat._json && mv napcat/config/napcat._json napcat/config/napcat.json
+    cp -f napcat/config/napcat.json napcat/config/napcat_$ACCOUNT.json
 fi
 rm -rf "/tmp/.X1-lock"
 
@@ -102,11 +100,9 @@ chmod -R 777 /app
 Xvfb :1 -screen 0 1080x760x16 +extension GLX +render > /dev/null 2>&1 &
 sleep 2
 # 方便调试, 或许应该重定向到/dev/null?
-if [ "$(arch)" = "x86_64" ]; then
-    cd /app/napcat.packet/
-    /app/napcat.packet/napcat.packet.linux &
-    sleep 2
-fi
+python3 napcat.packet.production.py &
+sleep 2
+
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
 cd /app/napcat

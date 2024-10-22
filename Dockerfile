@@ -2,7 +2,7 @@ FROM mlikiowa/napcat-docker:base
 
 WORKDIR /app
 
-COPY NapCat.Shell.zip entrypoint.sh /app/
+COPY NapCat.Shell.zip entrypoint.sh napcat.packet.production.py /app/
 
 # 安装Linux QQ
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
@@ -11,11 +11,6 @@ RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
     chmod +x entrypoint.sh && \
     echo "(async () => {await import('file:///app/napcat/napcat.mjs');})();" > /opt/QQ/resources/app/loadNapCat.js && \
     sed -i 's|"main": "[^"]*"|"main": "./loadNapCat.js"|' /opt/QQ/resources/app/package.json
-
-# 安装packet-server
-RUN mkdir /app/napcat.packet/
-COPY napcat.packet.linux /app/napcat.packet/
-RUN chmod -R 755 /app/napcat.packet/
 
 VOLUME /app/napcat/config
 VOLUME /app/.config/QQ
