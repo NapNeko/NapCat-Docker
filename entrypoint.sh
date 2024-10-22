@@ -95,12 +95,11 @@ EOF
 fi
 rm -rf "/tmp/.X1-lock"
 
-usermod -o -u ${NAPCAT_UID} napcat
-groupmod -o -g ${NAPCAT_GID} napcat
-usermod -g ${NAPCAT_GID} napcat
-chown -R ${NAPCAT_UID}:${NAPCAT_GID} /app
-
-gosu napcat Xvfb :1 -screen 0 1080x760x16 +extension GLX +render > /dev/null 2>&1 &
+# usermod -o -u ${NAPCAT_UID} napcat
+# groupmod -o -g ${NAPCAT_GID} napcat
+# usermod -g ${NAPCAT_GID} napcat
+chmod -R 777 /app
+Xvfb :1 -screen 0 1080x760x16 +extension GLX +render > /dev/null 2>&1 &
 sleep 2
 # 方便调试, 或许应该重定向到/dev/null?
 if [ "$(arch)" = "x86_64" ]; then
