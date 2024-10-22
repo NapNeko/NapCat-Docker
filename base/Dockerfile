@@ -26,7 +26,6 @@ RUN apt-get update && apt-get install -y \
     dbus-user-session \
     curl \
     jq \
-    gosu \
     tzdata && \
     echo "${TZ}" > /etc/timezone && \ 
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
