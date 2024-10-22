@@ -50,6 +50,9 @@ services:
         ports:
             - 3001:3001
             - 6099:6099
+        tty: true
+        security_opt:
+            - seccomp:unconfined
         container_name: napcat
         network_mode: bridge
         restart: always
@@ -92,6 +95,7 @@ services:
             - NAPCAT_GID=${NAPCAT_GID}
         container_name: napcat
         network_mode: bridge
+        tty: true
         security_opt:
             - seccomp:unconfined
         ports:
@@ -121,6 +125,7 @@ docker run -d \
 -p 6099:6099 \
 --name napcat \
 --restart=always \
+--security-opt seccomp:unconfined \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -142,6 +147,7 @@ services:
         ports:
             - 3000:3000
             - 6099:6099
+        tty: true
         security_opt:
             - seccomp:unconfined
         container_name: napcat
