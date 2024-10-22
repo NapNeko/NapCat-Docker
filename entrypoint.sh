@@ -111,4 +111,4 @@ fi
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
 cd /app/napcat
-gosu napcat /opt/QQ/qq --no-sandbox -q $ACCOUNT
+/opt/QQ/qq --no-sandbox -q $ACCOUNT
