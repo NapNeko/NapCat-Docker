@@ -30,6 +30,7 @@ docker run -d \
 -p 6099:6099 \
 --name napcat \
 --restart=always \
+--security-opt seccomp:unconfined \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -70,6 +71,7 @@ docker run -d \
 -e WS_URLS='["ws://192.168.3.8:5140/onebot"]' \
 -e NAPCAT_GID=$(id -g) \
 -e NAPCAT_UID=$(id -u) \
+--security-opt seccomp:unconfined \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
@@ -90,6 +92,8 @@ services:
             - NAPCAT_GID=${NAPCAT_GID}
         container_name: napcat
         network_mode: bridge
+        security_opt:
+            - seccomp:unconfined
         ports:
            - 6099:6099
         restart: always
@@ -138,6 +142,8 @@ services:
         ports:
             - 3000:3000
             - 6099:6099
+        security_opt:
+            - seccomp:unconfined
         container_name: napcat
         network_mode: bridge
         restart: always
