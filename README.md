@@ -18,6 +18,8 @@
 
 ### 命令行运行
 
+**sudo用户请注意, 不要在命令前直接加sudo, 否则会造成packet-server不断重连!**
+
 ```shell
 docker run -d \
 -e ACCOUNT=<机器人qq> \
