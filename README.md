@@ -13,12 +13,11 @@
 具体参数可参考[官方文档](https://napneko.github.io/zh-CN/guide/getting-started)
 
 # 启动容器
+**需要privileged 因为frida需要ptrace等高权**
 
 ## 正向 WS
 
 ### 命令行运行
-
-**sudo用户请注意, 不要在命令前直接加sudo, 否则会造成packet-server不断重连!**
 
 ```shell
 docker run -d \
