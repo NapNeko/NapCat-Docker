@@ -1,5 +1,7 @@
 FROM mlikiowa/napcat-docker:base
 
+RUN useradd --no-log-init -d /app napcat
+
 WORKDIR /app
 
 COPY NapCat.Shell.zip entrypoint.sh napcat.packet.production.py /app/

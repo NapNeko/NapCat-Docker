@@ -23,6 +23,8 @@
 docker run -d \
 -e ACCOUNT=<机器人qq> \
 -e WS_ENABLE=true \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -p 3001:3001 \
 -p 6099:6099 \
 --name napcat \
@@ -42,6 +44,8 @@ services:
         environment:
             - ACCOUNT=<机器人qq>
             - WS_ENABLE=true
+            - NAPCAT_UID=${NAPCAT_UID}
+            - NAPCAT_GID=${NAPCAT_GID}
         ports:
             - 3001:3001
             - 6099:6099
@@ -52,7 +56,7 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
-使用 `docker-compose up -d` 运行到后台
+使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
 
 ## 反向 WS
 <details>
@@ -84,6 +88,8 @@ services:
             - ACCOUNT=<机器人qq>
             - WSR_ENABLE=true
             - WS_URLS=["ws://192.168.3.8:5140/onebot"]
+            - NAPCAT_UID=${NAPCAT_UID}
+            - NAPCAT_GID=${NAPCAT_GID}
         container_name: napcat
         network_mode: bridge
         privileged: true
@@ -93,7 +99,7 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
-使用 `docker-compose up -d` 运行到后台
+使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
 </details>
 
 ## HTTP
@@ -108,6 +114,8 @@ docker run -d \
 -e HTTP_ENABLE=true \
 -e HTTP_POST_ENABLE=true \
 -e HTTP_URLS='["http://192.168.3.8:5140/onebot"]' \
+-e NAPCAT_GID=$(id -g) \
+-e NAPCAT_UID=$(id -u) \
 -p 3000:3000 \
 -p 6099:6099 \
 --name napcat \
@@ -129,6 +137,8 @@ services:
             - HTTP_ENABLE=true
             - HTTP_POST_ENABLE=true
             - HTTP_URLS=["http://192.168.3.8:5140/onebot"]
+            - NAPCAT_UID=${NAPCAT_UID}
+            - NAPCAT_GID=${NAPCAT_GID}
         ports:
             - 3000:3000
             - 6099:6099
@@ -139,7 +149,7 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
-使用 `docker-compose up -d` 运行到后台
+使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
 </details>
 
 # 固化路径，方便下次直接快速登录
@@ -155,3 +165,7 @@ NapCat 配置文件路径: /app/napcat/config
 ```shell
 docker logs napcat
 ```
+
+# Tips
+关于 NAPCAT_UID 与 NAPCAT_GID 环境变量
+[前往了解](https://containerization-automation.readthedocs.io/zh-cn/latest/docker/storage/[gosu]%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/)

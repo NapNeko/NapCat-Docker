@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
     dbus-user-session \
     curl \
     jq \
+    gosu \
     python3-pip \
     tzdata && \
     echo "${TZ}" > /etc/timezone && \ 
