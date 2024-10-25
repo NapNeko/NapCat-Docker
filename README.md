@@ -10,7 +10,7 @@
 
 容器通过环境变量来配置，环境变量名称可以查看 [entrypoint](./entrypoint.sh)👈
 
-具体参数可参考[官方文档](https://napneko.github.io/zh-CN/guide/getting-started)
+具体参数可参考[官方文档](https://napneko.com/config/basic#%E9%85%8D%E7%BD%AE%E5%86%85%E5%AE%B9%E5%8F%82%E6%95%B0%E8%A7%A3%E9%87%8A)
 
 # 启动容器
 **需要privileged 因为frida需要ptrace等高权**
