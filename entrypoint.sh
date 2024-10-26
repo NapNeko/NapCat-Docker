@@ -51,8 +51,8 @@ if [ ! -f "$CONFIG_PATH" ]; then
     : ${HTTP_HEART_ENABLE:='false'}
     : ${MUSIC_SIGN_URL:=''}
     : ${HTTP_SECRET:=''}
-    : ${NAPCAT_GID:=1001}
-    : ${NAPCAT_UID:=911}
+    : ${NAPCAT_GID:=0}
+    : ${NAPCAT_UID:=0}
     HTTP_URLS=$(chech_quotes $HTTP_URLS)
     WS_URLS=$(chech_quotes $WS_URLS)
 cat <<EOF > $CONFIG_PATH
