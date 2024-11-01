@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     tzdata && \
     echo "${TZ}" > /etc/timezone && \ 
-    pip3 install frida websockets && \
+    pip3 install frida websockets --no-cache-dir && \
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
     apt autoremove -y && \
     apt clean && \
