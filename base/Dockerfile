@@ -27,10 +27,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     jq \
     gosu \
-    python3-pip \
     tzdata && \
     echo "${TZ}" > /etc/timezone && \ 
-    pip3 install frida websockets --no-cache-dir && \
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
     apt autoremove -y && \
     apt clean && \

@@ -88,8 +88,6 @@ cat <<EOF > $CONFIG_PATH
     "token": "$TOKEN"
 }
 EOF
-    jq '.packetServer = "127.0.0.1:8086"' napcat/config/napcat.json > napcat/config/napcat._json && mv napcat/config/napcat._json napcat/config/napcat.json
-    cp -f napcat/config/napcat.json napcat/config/napcat_$ACCOUNT.json
 fi
 rm -rf "/tmp/.X1-lock"
 
@@ -99,9 +97,6 @@ usermod -g ${NAPCAT_GID} napcat
 chown -R ${NAPCAT_UID}:${NAPCAT_GID} /app
 
 gosu napcat Xvfb :1 -screen 0 1080x760x16 +extension GLX +render > /dev/null 2>&1 &
-sleep 2
-# 方便调试, 或许应该重定向到/dev/null?
-python3 napcat.packet.production.py &
 sleep 2
 
 export FFMPEG_PATH=/usr/bin/ffmpeg

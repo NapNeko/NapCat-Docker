@@ -4,7 +4,7 @@ RUN useradd --no-log-init -d /app napcat
 
 WORKDIR /app
 
-COPY NapCat.Shell.zip entrypoint.sh napcat.packet.production.py /app/
+COPY NapCat.Shell.zip entrypoint.sh /app/
 
 # 安装Linux QQ
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \

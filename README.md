@@ -13,7 +13,6 @@
 具体参数可参考[官方文档](https://napneko.com/config/basic#%E9%85%8D%E7%BD%AE%E5%86%85%E5%AE%B9%E5%8F%82%E6%95%B0%E8%A7%A3%E9%87%8A)
 
 # 启动容器
-**需要privileged 因为frida需要ptrace等高权**
 
 ## 正向 WS
 
@@ -29,7 +28,6 @@ docker run -d \
 -p 6099:6099 \
 --name napcat \
 --restart=always \
---privileged \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -49,7 +47,6 @@ services:
         ports:
             - 3001:3001
             - 6099:6099
-        privileged: true
         container_name: napcat
         network_mode: bridge
         restart: always
@@ -71,7 +68,6 @@ docker run -d \
 -e WS_URLS='["ws://192.168.3.8:5140/onebot"]' \
 -e NAPCAT_GID=$(id -g) \
 -e NAPCAT_UID=$(id -u) \
---privileged \
 --name napcat \
 --restart=always \
 mlikiowa/napcat-docker:latest
@@ -92,7 +88,6 @@ services:
             - NAPCAT_GID=${NAPCAT_GID}
         container_name: napcat
         network_mode: bridge
-        privileged: true
         ports:
            - 6099:6099
         restart: always
@@ -120,7 +115,6 @@ docker run -d \
 -p 6099:6099 \
 --name napcat \
 --restart=always \
---privileged \
 mlikiowa/napcat-docker:latest
 ```
 
@@ -142,7 +136,6 @@ services:
         ports:
             - 3000:3000
             - 6099:6099
-        privileged: true
         container_name: napcat
         network_mode: bridge
         restart: always
