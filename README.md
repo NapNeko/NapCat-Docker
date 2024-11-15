@@ -53,7 +53,7 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
-使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
+使用 `NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose up -d` 运行到后台
 
 ## 反向 WS
 <details>
@@ -94,7 +94,7 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
-使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
+使用 `NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose up -d` 运行到后台
 </details>
 
 ## HTTP
@@ -142,7 +142,7 @@ services:
         image: mlikiowa/napcat-docker:latest
 ```
 
-使用 `NAPCAT_UID=$(id -u); NAPCAT_GID=$(id -g); docker-compose up -d` 运行到后台
+使用 `NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose up -d` 运行到后台
 </details>
 
 # 固化路径，方便下次直接快速登录
