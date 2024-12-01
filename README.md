@@ -7,6 +7,10 @@
 - [x] Linux/Arm64
 
 # 启动容器
+### 获取日志/查看Token
+`docker logs 容器名`
+ 
+示例 `docker logs napcat`
 
 ### 命令行运行
 
