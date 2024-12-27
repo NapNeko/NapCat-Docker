@@ -14,12 +14,13 @@ fi
 
 # 配置 WebUI Token
 CONFIG_PATH=/app/napcat/config/webui.json
+
 if [ ! -f "${CONFIG_PATH}" ] && [ -n "${WEBUI_TOKEN}" ]; then
     echo "正在配置 WebUI Token..."
     cat > "${CONFIG_PATH}" << EOF
 {
     "host": "0.0.0.0",
-    "prefix": "",
+    "prefix": "${WEBUI_PREFIX}",
     "port": 6099,
     "token": "${WEBUI_TOKEN}",
     "loginRate": 3
