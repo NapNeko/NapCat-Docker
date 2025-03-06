@@ -28,6 +28,101 @@ if [ ! -f "${CONFIG_PATH}" ] && [ -n "${WEBUI_TOKEN}" ]; then
 EOF
 fi
 
+# 删除字符串两端的引号
+remove_quotes() {
+    local str="$1"
+    local first_char="${str:0:1}"
+    local last_char="${str: -1}"
+
+    if [[ ($first_char == '"' && $last_char == '"') || ($first_char == "'" && $last_char == "'") ]]; then
+        # 两端都是双引号
+        if [[ $first_char == '"' ]]; then
+            str="${str:1:-1}"
+        # 两端都是单引号
+        else
+            str="${str:1:-1}"
+        fi
+    fi
+    echo "$str"
+}
+
+: ${WS_ENABLE:='false'}
+: ${WS_PORT:=3001}
+: ${RWS_ENABLE:='false'}
+: ${RWS_ADDRESS:='ws://127.0.0.1:8080/onebot/v11/ws'}
+
+# 配置 onebot
+CONFIG_PATH=/app/napcat/config/onebot11_$ACCOUNT.json
+
+if [ ! -f "${CONFIG_PATH}" ]; then
+    cat > "${CONFIG_PATH}" << EOF
+{
+  "http": {
+    "enable": false,
+    "host": "",
+    "port": 3000,
+    "secret": "",
+    "enableHeart": false,
+    "enablePost": false,
+    "postUrls": []
+  },
+  "ws": {
+    "enable": false,
+    "host": "",
+    "port": 3001
+  },
+  "reverseWs": {
+    "enable": false,
+    "urls": []
+  },
+  "GroupLocalTime": {
+    "Record": false,
+    "RecordList": []
+  },
+  "debug": false,
+  "heartInterval": 30000,
+  "messagePostFormat": "array",
+  "enableLocalFile2Url": true,
+  "musicSignUrl": "",
+  "reportSelfMessage": false,
+  "token": "",
+  "network": {
+    "httpServers": [],
+    "httpSseServers": [],
+    "httpClients": [],
+    "websocketServers": [
+      {
+        "enable": $(remove_quotes $WS_ENABLE),
+        "name": "ws",
+        "host": "0.0.0.0",
+        "port": $(remove_quotes $WS_PORT),
+        "reportSelfMessage": false,
+        "enableForcePushEvent": true,
+        "messagePostFormat": "array",
+        "token": "",
+        "debug": false,
+        "heartInterval": 30000
+      }
+    ],
+    "websocketClients": [
+      {
+        "enable": $(remove_quotes $RWS_ENABLE),
+        "name": "rws",
+        "url": "$(remove_quotes $RWS_ADDRESS)",
+        "reportSelfMessage": false,
+        "messagePostFormat": "array",
+        "token": "",
+        "debug": false,
+        "heartInterval": 30000,
+        "reconnectInterval": 30000
+      }
+    ],
+    "plugins": []
+  },
+  "parseMultMsg": false
+}
+EOF
+fi
 
 rm -rf "/tmp/.X1-lock"
 
@@ -44,5 +139,4 @@ sleep 2
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
 cd /app/napcat
-ACCOUNT=$(ls /app/napcat/config/ | grep -oE '[1-9][0-9]{4,12}' | head -n 1)
 gosu napcat /opt/QQ/qq --no-sandbox -q $ACCOUNT
