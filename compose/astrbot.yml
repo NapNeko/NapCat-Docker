@@ -12,6 +12,7 @@ services:
     restart: always
     image: mlikiowa/napcat-docker:latest
     volumes:
+      - ./data:/AstrBot/data
       - ./napcat:/app/napcat
       - ./ntqq:/app/.config/QQ
     networks:
