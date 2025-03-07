@@ -1,5 +1,5 @@
-version: '3.8'
-
+# docker-compose.yml
+# NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose -f ./compose/astrbot.yml up -d
 services:
   napcat:
     environment:
