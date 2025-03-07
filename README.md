@@ -73,4 +73,4 @@ NapCat 配置文件路径: /app/napcat/config
 
 [WerbsockServer Compose模板](./compose/ws.yml)
 
-> 欢迎Pr.此方案快速填充填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口和WebUi默认密码。
+> 欢迎Pr.此方案快速填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口和WebUi默认密码。
