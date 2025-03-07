@@ -47,7 +47,7 @@ remove_quotes() {
 }
 
 if [ -n "${MODE}" ]; then
-    cp /app/templates/$MODE.json /app/napcat/config/onebot.json
+    cp /app/templates/$MODE.json /app/napcat/config/onebot11.json
 fi
 
 rm -rf "/tmp/.X1-lock"
