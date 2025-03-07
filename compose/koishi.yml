@@ -1,0 +1,39 @@
+# Koishi & NapCat Docker Compose 配置文件
+# 启动命令: NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose -f ./compose/koishi.yml up -d
+services:
+  napcat:
+    container_name: napcat
+    image: mlikiowa/napcat-docker:latest
+    restart: always
+    environment:
+      - NAPCAT_UID=${NAPCAT_UID:-1000}
+      - NAPCAT_GID=${NAPCAT_GID:-1000}
+      - MODE=koishi
+    ports:
+      - 6099:6099
+    volumes:
+      - ./napcat:/app/napcat
+      - ./ntqq:/app/.config/QQ
+      - ./koishi:/koishi
+    networks:
+      - koishi_network
+    mac_address: "02:42:ac:11:00:02"
+
+  koishi:
+    container_name: koishi
+    image: koishijs/koishi:latest
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 5140:5140
+    volumes:
+      - ./napcat:/app/napcat
+      - ./ntqq:/app/.config/QQ
+      - ./koishi:/koishi
+    networks:
+      - koishi_network
+
+networks:
+  koishi_network:
+    driver: bridge
