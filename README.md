@@ -11,7 +11,7 @@
 `docker logs 容器名`
  
 示例 `docker logs napcat`
-
+默认登录Token `napcat`
 ### 命令行运行
 
 ```shell
