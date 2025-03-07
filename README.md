@@ -62,4 +62,11 @@ NapCat 配置文件路径: /app/napcat/config
 
 # Tips
 关于 NAPCAT_UID 与 NAPCAT_GID 环境变量
+
 [前往了解](https://containerization-automation.readthedocs.io/zh-cn/latest/docker/storage/[gosu]%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/)
+
+
+# 一键模板化配置
+[AstrBot Compose模板](./compose/astrbot.yml)
+
+> 快速填充填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口和WebUi默认密码。
