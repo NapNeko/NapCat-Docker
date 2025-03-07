@@ -8,7 +8,7 @@
       {
         "enable": true,
         "name": "rws",
-        "url": "ws://127.0.0.1:8080/onebot/v11/ws",
+        "url": "ws://nonebot:8080/onebot/v11/ws",
         "reportSelfMessage": false,
         "messagePostFormat": "array",
         "token": "",
