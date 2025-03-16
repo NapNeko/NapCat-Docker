@@ -65,4 +65,8 @@ sleep 2
 export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
 cd /app/napcat
-gosu napcat /opt/QQ/qq --no-sandbox
+if [ -n "${ACCOUNT}" ]; then
+    gosu napcat /opt/QQ/qq --no-sandbox -q $ACCOUNT
+else
+    gosu napcat /opt/QQ/qq --no-sandbox
+fi
