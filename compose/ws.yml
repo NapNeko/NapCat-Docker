@@ -17,5 +17,5 @@ services:
       - 6099:6099
     
     volumes:
-      - ./napcat:/app/napcat
+      - ./napcat:/app/napcat/config
       - ./ntqq:/app/.config/QQ
