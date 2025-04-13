@@ -19,6 +19,8 @@ services:
       - astrbot_network
     mac_address: "02:42:ac:11:00:02"
   astrbot:
+    environment:
+      - TZ=Asia/Shanghai
     image: soulter/astrbot:latest
     container_name: astrbot
     restart: always
