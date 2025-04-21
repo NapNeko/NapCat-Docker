@@ -22,7 +22,6 @@ services:
       - 6099:6099
       - 3001:3001
     volumes:
-      - ./napcat:/app/napcat
       - ./ntqq:/app/.config/QQ
     networks:
       - q2tg_network
@@ -33,7 +32,7 @@ services:
     image: clansty/q2tg:rainbowcat
     restart: unless-stopped
     volumes:
-      - ./napcat:/app/napcat
+      - ./napcat/config:/app/napcat/config
       - ./ntqq:/app/.config/QQ
     networks:
       - q2tg_network
