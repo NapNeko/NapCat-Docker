@@ -28,7 +28,7 @@ services:
     ports:
       - 5140:5140
     volumes:
-      - ./napcat:/app/napcat
+      - ./napcat/config:/app/napcat/config
       - ./ntqq:/app/.config/QQ
       - ./koishi:/koishi
     networks:
