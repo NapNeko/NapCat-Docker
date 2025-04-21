@@ -13,7 +13,6 @@ services:
     image: mlikiowa/napcat-docker:latest
     volumes:
       - ./data:/AstrBot/data
-      - ./napcat:/app/napcat
       - ./ntqq:/app/.config/QQ
     networks:
       - astrbot_network
@@ -30,7 +29,7 @@ services:
       - "6199:6199"
     volumes:
       - ./data:/AstrBot/data
-      - ./napcat:/app/napcat
+      - ./napcat/config:/app/napcat/config
       - ./ntqq:/app/.config/QQ
     networks:
       - astrbot_network
