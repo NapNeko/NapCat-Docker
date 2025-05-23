@@ -5,7 +5,8 @@ services:
     image: ghcr.io/sealdice/sealdice:sha-2428978
     container_name: sealdice
     volumes:
-      - "./sealdice:/app/sealdice"
+      - "./data:/data"
+      - "./backups:/backups"
     networks:
       - sealdice_network
     depends_on:
@@ -19,7 +20,8 @@ services:
     volumes:
       - "./napcat/config:/app/napcat/config"
       - "./napcat/QQ_DATA:/app/.config/QQ"
-      - "./sealdice:/app/sealdice"
+      - "./data:/data"
+      - "./backups:/backups"
     environment:
       - NAPCAT_UID=${NAPCAT_UID:-1000}
       - NAPCAT_GID=${NAPCAT_GID:-1000}
