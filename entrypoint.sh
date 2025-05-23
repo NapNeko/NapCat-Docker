@@ -1,15 +1,64 @@
 #!/bin/bash
 
+update_napcatfile() {
+    # 定义下载链接
+    URL1="https://github.moeyy.xyz/https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip"
+    URL2="https://github.com/NapNeko/NapCatQQ/releases/latest/download/NapCat.Shell.zip"
+
+    # 检查NapCat.Shell.zip是否存在，不存在则下载
+    if [ ! -f "NapCat.Shell.zip" ]; then
+        echo "NapCat.Shell.zip 文件不存在，开始下载..."
+
+        # 尝试第一个下载链接
+        if curl -L -O "$URL1"; then
+            echo "文件下载成功，创建备份..."
+            cp -f "NapCat.Shell.zip" "NapCat.Shell_old.zip"
+        else
+            echo "第一个下载链接失败，尝试第二个链接..."
+            # 尝试第二个下载链接
+            if curl -L -O "$URL2"; then
+                echo "文件下载成功，创建备份..."
+                cp -f "NapCat.Shell.zip" "NapCat.Shell_old.zip"
+            else
+                echo "两个下载链接都失败了，尝试使用备份文件。"
+
+                # 如果备份文件存在，则克隆为NapCat.Shell.zip
+                if [ -f "NapCat.Shell_old.zip" ]; then
+                    echo "使用备份文件恢复..."
+                    cp -f "NapCat.Shell_old.zip" "NapCat.Shell.zip"
+                else
+                    echo "备份文件不存在，请手动下载。"
+                    exit 1
+                fi
+            fi
+        fi
+    else
+        echo "已存在文件，创建备份..."
+        cp -f "NapCat.Shell.zip" "NapCat.Shell_old.zip"
+    fi
+}
+
+
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ]; then
+    update_napcatfile
     unzip -q NapCat.Shell.zip -d ./NapCat.Shell
-    cp -rf NapCat.Shell/* napcat/
+    if [ -f "napcat/config/napcat.json" ]; then
+        echo "发现napcat/config/napcat.json，排除NapCat.Shell/config文件夹。"
+        #rsync -av --exclude='config/' NapCat.Shell/ napcat/
+        find NapCat.Shell -path NapCat.Shell/config -prune -o -exec cp -r {} napcat/ \;
+    else
+        echo "未发现napcat/config/napcat.json，全部内容将被复制。"
+        cp -rf NapCat.Shell/* napcat/
+    fi
     rm -rf ./NapCat.Shell
+    rm -rf ./NapCat.Shell.zip
 fi
+
 if [ ! -f "napcat/config/napcat.json" ]; then
-    unzip -q NapCat.Shell.zip -d ./NapCat.Shell
-    cp -rf NapCat.Shell/config/* napcat/config/
-    rm -rf ./NapCat.Shell
+    unzip -q NapCat.Shell_old.zip -d ./NapCat.Shell_old
+    cp -rf NapCat.Shell_old/config/* napcat/config/
+    rm -rf ./NapCat.Shell_old
 fi
 
 # 配置 WebUI Token
