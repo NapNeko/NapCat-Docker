@@ -2,7 +2,7 @@
 # NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose -f ./compose/sealdice.yml up -d 
 services:
   sealdice:
-    image: ghcr.io/sealdice/sealdice:sha-2428978
+    image: ghcr.io/sealdice/sealdice:edge
     container_name: sealdice
     ports:
       - "3211:3211"
