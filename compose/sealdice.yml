@@ -4,6 +4,8 @@ services:
   sealdice:
     image: ghcr.io/sealdice/sealdice:sha-2428978
     container_name: sealdice
+    ports:
+      - "3211:3211"
     volumes:
       - "./data:/data"
       - "./backups:/backups"
