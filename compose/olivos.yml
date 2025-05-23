@@ -1,0 +1,39 @@
+# docker-compose.yml
+# ACCOUNT=123456 NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose -f ./compose/olivos.yml up -d 
+services:
+  olivos-app:
+    image: shiaworkshop/olivos:latest
+    container_name: olivos-main
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./OlivOS:/app/OlivOS"
+      - "./napcat/config:/app/napcat/config"
+    environment:
+      - LOGIN_UIN=${ACCOUNT}
+    networks:
+      - olivos_network
+    depends_on:
+      - napcat
+
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    container_name: napcat
+    ports:
+      - "6099:6099"
+    volumes:
+      - "./napcat/config:/app/napcat/config"
+      - "./napcat/QQ_DATA:/app/.config/QQ"
+      - "./OlivOS:/app/OlivOS"
+    environment:
+      - NAPCAT_UID=${NAPCAT_UID:-1000}
+      - NAPCAT_GID=${NAPCAT_GID:-1000}
+      - ACCOUNT=${ACCOUNT}
+      - MODE=olivos
+    networks:
+      - olivos_network
+    mac_address: "02:42:ac:11:00:02"
+
+networks:
+  olivos_network:
+    driver: bridge

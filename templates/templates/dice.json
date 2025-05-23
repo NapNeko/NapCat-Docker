@@ -1,0 +1,26 @@
+{
+  "network": {
+    "httpServers": [],
+    "httpSseServers": [],
+    "httpClients": [],
+    "websocketServers": [
+    {
+        "enable": true,
+        "name": "dice",
+        "host": "0.0.0.0",
+        "port": 15801,
+        "reportSelfMessage": false,
+        "enableForcePushEvent": true,
+        "messagePostFormat": "array",
+        "token": "",
+        "debug": false,
+        "heartInterval": 30000
+    }
+    ],
+    "websocketClients": [],
+    "plugins": []
+},
+  "musicSignUrl": "",
+  "enableLocalFile2Url": false,
+  "parseMultMsg": false
+}
