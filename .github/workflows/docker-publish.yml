@@ -2,6 +2,8 @@ name: docker-publish
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # 每天UTC时间0点（北京时间8点）执行
 
 jobs:
   publish-dockerhub:
@@ -9,30 +11,62 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Get artifacts
+        
+      # 获取源仓库的最新 release 版本
+      - name: Get latest GitHub release tag
+        id: get_github_tag
         run: |
-          bash get_artifacts.sh ${{ secrets.GITHUB_TOKEN }} $(curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/NapNeko/NapCatQQ/releases/latest" | jq -r '.tag_name')
+          TAG=$(curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/NapNeko/NapCatQQ/releases/latest" | jq -r '.tag_name')
+          echo "github_tag=$TAG" >> $GITHUB_OUTPUT
+          
+      # 检查 Docker Hub 是否存在该版本
+      - name: Check Docker Hub image existence
+        id: check_docker_image
+        run: |
+          # 查询 Docker Hub API
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://hub.docker.com/v2/repositories/mlikiowa/napcat-docker/tags/${{ steps.get_github_tag.outputs.github_tag }}")
+          
+          # 设置检查结果
+          if [ "$response" = "200" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Found existing image, skipping build"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "New version detected, proceeding with build"
+          fi
+          
+      # 仅当 Docker Hub 不存在该版本时执行以下步骤
+      - name: Get artifacts
+        if: ${{ steps.check_docker_image.outputs.exists == 'false' }}
+        run: |
+          bash get_artifacts.sh ${{ secrets.GITHUB_TOKEN }} ${{ steps.get_github_tag.outputs.github_tag }}
+          
       - name: Set up Docker buildx
+        if: ${{ steps.check_docker_image.outputs.exists == 'false' }}
         uses: docker/setup-buildx-action@v3
+        
       - name: Login to Docker Hub
+        if: ${{ steps.check_docker_image.outputs.exists == 'false' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      # Fork from https://github.com/koishijs/boilerplate/blob/master/.github/workflows/docker.yml
+          
       - name: Run buildx and push
+        if: ${{ steps.check_docker_image.outputs.exists == 'false' }}
         env:
           DOCKER_REPO: mlikiowa/napcat-docker
-          GITHUB_REPO: NapNeko/NapCatQQ
         run: |
-          TAG=$(curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/NapNeko/NapCatQQ/releases/latest" | jq -r '.tag_name')
           docker buildx build \
             --output "type=image,push=true" \
             --platform linux/amd64,linux/arm64 \
-            --tag ${DOCKER_REPO}:$TAG \
+            --tag ${DOCKER_REPO}:${{ steps.get_github_tag.outputs.github_tag }} \
             --tag ${DOCKER_REPO}:latest \
             --file ./Dockerfile \
             .
+            
       - name: Docker Hub logout
         if: always()
         run: docker logout
