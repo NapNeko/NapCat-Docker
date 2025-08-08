@@ -26,6 +26,12 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
+```shell
+（ps：在win下部署 以上代码docker萌新小白可能会直接复制粘贴导致报错，提交一个可以直接复制粘贴用的，
+ 按照astrbot默认端口建议6199所以新加了个6199，那个uid还没搞清楚是什么）
+docker run -d -p 6099:6099  -p 3001:3001 -p 6199:6199 --name napcat --restart=always mlikiowa/napcat-docker:latest
+```
+
 ### docker-compose 运行
 
 创建 `docker-compose.yml` 文件
