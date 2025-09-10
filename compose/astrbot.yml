@@ -13,10 +13,11 @@ services:
     image: mlikiowa/napcat-docker:latest
     volumes:
       - ./data:/AstrBot/data
+      - ./napcat/config:/app/napcat/config
       - ./ntqq:/app/.config/QQ
     networks:
       - astrbot_network
-    mac_address: "02:42:ac:11:00:02"
+    #mac_address: "02:42:ac:11:00:02"
   astrbot:
     environment:
       - TZ=Asia/Shanghai
@@ -25,12 +26,10 @@ services:
     restart: always
     ports:
       - "6185:6185"
-      - "6195:6195"
-      - "6199:6199"
+      #- "6195:6195"
+      #- "6199:6199"
     volumes:
       - ./data:/AstrBot/data
-      - ./napcat/config:/app/napcat/config
-      - ./ntqq:/app/.config/QQ
     networks:
       - astrbot_network
 networks:
