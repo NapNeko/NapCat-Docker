@@ -1,5 +1,6 @@
 #!/bin/bash
 
+trap "" SIGPIPE
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ]; then
     unzip -q NapCat.Shell.zip -d ./NapCat.Shell
