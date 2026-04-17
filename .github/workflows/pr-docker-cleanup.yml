@@ -1,0 +1,83 @@
+name: pr-docker-cleanup
+
+# =============================================================================
+# PR 测试镜像清理
+# =============================================================================
+# 每 6 小时运行一次，通过 DockerHub API 删除超过 24h 的 pr-* tag。
+# =============================================================================
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      ttl_hours:
+        description: "Max age in hours (default 168 = 7 days)"
+        required: false
+        default: "168"
+      dry_run:
+        description: "Only print, do not delete"
+        required: false
+        default: "false"
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup expired pr-* tags
+        uses: actions/github-script@v7
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          script: |
+            const ttlHours = parseInt('${{ github.event.inputs.ttl_hours }}' || '168');
+            const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
+            const namespace = 'mlikiowa';
+            const repo = 'napcat-docker';
+
+            // Login to DockerHub
+            const loginResp = await fetch('https://hub.docker.com/v2/users/login/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                username: process.env.DOCKERHUB_USERNAME,
+                password: process.env.DOCKERHUB_TOKEN
+              })
+            });
+            const { token } = await loginResp.json();
+            if (!token) throw new Error('DockerHub login failed');
+
+            const nowTs = Date.now();
+            const ttlMs = ttlHours * 3600 * 1000;
+            let deleted = 0, scanned = 0;
+
+            core.info(`TTL: ${ttlHours}h, dry_run: ${dryRun}`);
+
+            let url = `https://hub.docker.com/v2/repositories/${namespace}/${repo}/tags/?page_size=100`;
+            while (url) {
+              const resp = await fetch(url, { headers: { Authorization: `JWT ${token}` } });
+              const page = await resp.json();
+
+              for (const tag of page.results || []) {
+                scanned++;
+                if (!tag.name.startsWith('pr-')) continue;
+
+                const age = nowTs - new Date(tag.last_updated).getTime();
+                if (age > ttlMs) {
+                  const ageH = Math.floor(age / 3600000);
+                  core.info(`Expired: ${tag.name} (age=${ageH}h)`);
+                  if (dryRun) continue;
+
+                  const delResp = await fetch(
+                    `https://hub.docker.com/v2/repositories/${namespace}/${repo}/tags/${tag.name}/`,
+                    { method: 'DELETE', headers: { Authorization: `JWT ${token}` } }
+                  );
+                  if (delResp.ok) deleted++;
+                  else core.warning(`Delete ${tag.name} failed: ${delResp.status}`);
+                }
+              }
+              url = page.next || null;
+            }
+
+            core.info(`Scanned: ${scanned}, Deleted: ${deleted}`);

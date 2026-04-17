@@ -1,0 +1,200 @@
+name: pr-docker-build
+
+# =============================================================================
+# PR 测试镜像构建
+# =============================================================================
+# 由 NapCatQQ 仓库的 PR 构建工作流通过 repository_dispatch 触发。
+# 从 NapCatQQ 的 artifact 中拉取 NapCat.Shell.zip，构建 amd64/arm64 镜像，
+# tag 形如 pr-<pr_number>-<short_sha>，推送到 DockerHub，并回写 PR 评论。
+# tag 会由 pr-docker-cleanup 工作流在 24h 后自动清理。
+# =============================================================================
+
+on:
+  repository_dispatch:
+    types: [napcatqq-pr-build]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number"
+        required: true
+      pr_sha:
+        description: "PR head SHA (full)"
+        required: true
+      pr_head_repo:
+        description: "PR head repo (owner/repo), for fork"
+        required: false
+        default: ""
+      source_repo:
+        description: "Source repo (NapCatQQ)"
+        required: false
+        default: "NapNeko/NapCatQQ"
+      release_repo:
+        description: "PR release repo"
+        required: false
+        default: "NapNeko/napcat-pr-release"
+
+env:
+  REGISTRY_IMAGE: mlikiowa/napcat-docker
+  SOURCE_REPO: ${{ github.event.client_payload.source_repo || github.event.inputs.source_repo || 'NapNeko/NapCatQQ' }}
+  PR_NUMBER: ${{ github.event.client_payload.pr_number || github.event.inputs.pr_number }}
+  PR_SHA: ${{ github.event.client_payload.pr_sha || github.event.inputs.pr_sha }}
+  PR_SHORT_SHA: ${{ github.event.client_payload.pr_short_sha || '' }}
+  PR_HEAD_REPO: ${{ github.event.client_payload.pr_head_repo || github.event.inputs.pr_head_repo }}
+  RELEASE_REPO: ${{ github.event.client_payload.release_repo || github.event.inputs.release_repo || 'NapNeko/napcat-pr-release' }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-docker-${{ github.event.client_payload.pr_number || github.event.inputs.pr_number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.meta.outputs.image_tag }}
+      status: ${{ steps.buildx.outcome }}
+    steps:
+      - name: Normalize short SHA
+        id: meta
+        run: |
+          SHORT="${PR_SHORT_SHA}"
+          if [ -z "${SHORT}" ]; then
+            SHORT="${PR_SHA:0:7}"
+          fi
+          TAG="pr-${PR_NUMBER}-${SHORT}"
+          echo "short_sha=${SHORT}" >> "$GITHUB_OUTPUT"
+          echo "image_tag=${TAG}"   >> "$GITHUB_OUTPUT"
+          echo "Image tag: ${REGISTRY_IMAGE}:${TAG}"
+
+      - name: Checkout NapCat-Docker
+        uses: actions/checkout@v4
+
+      # 从 napcat-pr-release 仓库的 release 下载 NapCat.Shell.zip（公开，无需 PAT）
+      - name: Download NapCat.Shell.zip from PR release
+        run: |
+          RELEASE_TAG="pr-${PR_NUMBER}-${{ steps.meta.outputs.short_sha }}"
+          DOWNLOAD_URL="https://github.com/${RELEASE_REPO}/releases/download/${RELEASE_TAG}/NapCat.Shell.zip"
+          echo "Downloading from: ${DOWNLOAD_URL}"
+          curl -sSL -o NapCat.Shell.zip "${DOWNLOAD_URL}"
+          ls -lh NapCat.Shell.zip
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push (amd64 + arm64)
+        id: buildx
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.image_tag }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ env.SOURCE_REPO }}
+            org.opencontainers.image.revision=${{ env.PR_SHA }}
+            napcat.pr.number=${{ env.PR_NUMBER }}
+            napcat.pr.expires-after-hours=168
+
+      - name: Docker Hub logout
+        if: always()
+        run: docker logout
+
+      - name: Notify PR comment
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          BUILD_STATUS: ${{ steps.buildx.outcome }}
+          IMAGE_TAG: ${{ steps.meta.outputs.image_tag }}
+        with:
+          github-token: ${{ secrets.PR_RELEASE_PAT }}
+          script: |
+            const MARKER = '<!-- napcat-pr-docker -->';
+            const sourceRepo = process.env.SOURCE_REPO;
+            const [owner, repo] = sourceRepo.split('/');
+            const prNumber = parseInt(process.env.PR_NUMBER);
+            const prSha = process.env.PR_SHA || '';
+            const shortSha = prSha ? prSha.substring(0, 7) : 'unknown';
+            const success = process.env.BUILD_STATUS === 'success';
+            const imageTag = process.env.IMAGE_TAG || '';
+            const registryImage = process.env.REGISTRY_IMAGE;
+            const dockerImage = success ? `${registryImage}:${imageTag}` : '';
+            const time = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+
+            const statusBadge = success
+              ? `![Success](https://img.shields.io/badge/Docker-%E6%9E%84%E5%BB%BA%E6%88%90%E5%8A%9F-success?style=for-the-badge&logo=docker&logoColor=white)`
+              : `![Failed](https://img.shields.io/badge/Docker-%E6%9E%84%E5%BB%BA%E5%A4%B1%E8%B4%A5-critical?style=for-the-badge&logo=docker&logoColor=white)`;
+            const headerTitle = success ? '# \u2705 Docker \u6d4b\u8bd5\u955c\u50cf\u5c31\u7eea' : '# \u274c Docker \u6d4b\u8bd5\u955c\u50cf\u6784\u5efa\u5931\u8d25';
+
+            const lines = [
+              MARKER,
+              '',
+              '<div align="center">',
+              '',
+              headerTitle,
+              '',
+              statusBadge,
+              '',
+              '</div>',
+              '',
+              '---',
+              '',
+              '## \ud83d\udccb \u6784\u5efa\u4fe1\u606f',
+              '',
+              '| \u9879\u76ee | \u503c |',
+              '| :--- | :--- |',
+              `| \ud83d\udcdd \u63d0\u4ea4 | \`${shortSha}\` |`,
+              `| \ud83d\udd17 PR | #${prNumber} |`,
+              `| \ud83d\udd50 \u5b8c\u6210\u65f6\u95f4 | ${time} |`,
+            ];
+
+            if (success && dockerImage) {
+              lines.push(
+                '',
+                '---',
+                '',
+                '## \ud83d\ude80 \u5feb\u901f\u4f7f\u7528',
+                '',
+                '```bash',
+                `docker pull ${dockerImage}`,
+                '```',
+                '',
+                '> \u26a0\ufe0f \u6b64\u4e3a PR \u6d4b\u8bd5\u955c\u50cf\uff0c\u4fdd\u7559 7 \u5929\u540e\u81ea\u52a8\u6e05\u7406\u3002'
+              );
+            }
+
+            lines.push(
+              '',
+              '---',
+              '',
+              success
+                ? '<div align="center">\n\n> \ud83c\udf89 **Docker \u6d4b\u8bd5\u955c\u50cf\u5df2\u5c31\u7eea\uff01**\n>\n> \u4f7f\u7528\u4e0a\u65b9\u547d\u4ee4\u62c9\u53d6\u955c\u50cf\u8fdb\u884c\u6d4b\u8bd5\n\n</div>'
+                : '<div align="center">\n\n> \u26a0\ufe0f **Docker \u955c\u50cf\u6784\u5efa\u5931\u8d25**\n>\n> \u8bf7\u68c0\u67e5 Actions \u65e5\u5fd7\u67e5\u770b\u9519\u8bef\u8be6\u60c5\n\n</div>'
+            );
+
+            const body = lines.join('\n');
+
+            // \u67e5\u627e\u5e76\u66f4\u65b0\u5df2\u6709\u8bc4\u8bba
+            const allComments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: prNumber, per_page: 100
+            });
+            const existing = allComments.find(c => c.body && c.body.includes(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              core.info(`Updated comment #${existing.id}`);
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body });
+              core.info('Created new comment');
+            }
