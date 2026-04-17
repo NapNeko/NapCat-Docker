@@ -44,6 +44,7 @@ env:
 
 permissions:
   contents: read
+  actions: write # 允许写入 GitHub Actions Cache
 
 concurrency:
   group: pr-docker-${{ github.event.client_payload.pr_number || github.event.inputs.pr_number }}
@@ -85,6 +86,9 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:latest
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -101,6 +105,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.image_tag }}
+          # 缓存 QQ deb 等耗时层，同一 PR 重复触发时复用
+          cache-from: type=gha,scope=pr-docker-${{ env.PR_NUMBER }}
+          cache-to: type=gha,mode=max,scope=pr-docker-${{ env.PR_NUMBER }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ env.SOURCE_REPO }}
             org.opencontainers.image.revision=${{ env.PR_SHA }}
