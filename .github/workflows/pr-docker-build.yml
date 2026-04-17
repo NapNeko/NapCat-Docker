@@ -105,14 +105,25 @@ jobs:
             org.opencontainers.image.source=https://github.com/${{ env.SOURCE_REPO }}
             org.opencontainers.image.revision=${{ env.PR_SHA }}
             napcat.pr.number=${{ env.PR_NUMBER }}
-            napcat.pr.expires-after-hours=168
+            napcat.pr.expires-after-hours=120
 
       - name: Docker Hub logout
         if: always()
         run: docker logout
 
-      - name: Notify PR comment
+      - name: Check PAT for PR comment
+        id: check-pat
         if: always()
+        run: |
+          if [ -n "${{ secrets.PR_RELEASE_PAT }}" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::PR_RELEASE_PAT 未配置，跳过 PR 评论回写"
+          fi
+
+      - name: Notify PR comment
+        if: always() && steps.check-pat.outputs.available == 'true'
         uses: actions/github-script@v7
         env:
           BUILD_STATUS: ${{ steps.buildx.outcome }}
@@ -170,7 +181,7 @@ jobs:
                 `docker pull ${dockerImage}`,
                 '```',
                 '',
-                '> \u26a0\ufe0f \u6b64\u4e3a PR \u6d4b\u8bd5\u955c\u50cf\uff0c\u4fdd\u7559 7 \u5929\u540e\u81ea\u52a8\u6e05\u7406\u3002'
+                '> \u26a0\ufe0f \u6b64\u4e3a PR \u6d4b\u8bd5\u955c\u50cf\uff0c\u4fdd\u7559 5 \u5929\u540e\u81ea\u52a8\u6e05\u7406\u3002'
               );
             }
 

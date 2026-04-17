@@ -3,7 +3,7 @@ name: pr-docker-cleanup
 # =============================================================================
 # PR 测试镜像清理
 # =============================================================================
-# 每 6 小时运行一次，通过 DockerHub API 删除超过 24h 的 pr-* tag。
+# 每 6 小时运行一次，通过 DockerHub API 删除超过 5 天的 pr-* tag。
 # =============================================================================
 
 on:
@@ -12,9 +12,9 @@ on:
   workflow_dispatch:
     inputs:
       ttl_hours:
-        description: "Max age in hours (default 168 = 7 days)"
+        description: "Max age in hours (default 120 = 5 days)"
         required: false
-        default: "168"
+        default: "120"
       dry_run:
         description: "Only print, do not delete"
         required: false
@@ -31,7 +31,7 @@ jobs:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         with:
           script: |
-            const ttlHours = parseInt('${{ github.event.inputs.ttl_hours }}' || '168');
+            const ttlHours = parseInt('${{ github.event.inputs.ttl_hours }}' || '120');
             const dryRun = '${{ github.event.inputs.dry_run }}' === 'true';
             const namespace = 'mlikiowa';
             const repo = 'napcat-docker';
