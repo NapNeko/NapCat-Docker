@@ -1,0 +1,53 @@
+# qq-ai-bot & NapCat Docker Compose 配置文件
+# 启动命令: NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose -f ./compose/qq-ai-bot.yml up -d
+services:
+  napcat:
+    container_name: napcat
+    image: mlikiowa/napcat-docker:latest
+    restart: always
+    environment:
+      - NAPCAT_UID=${NAPCAT_UID:-1000}
+      - NAPCAT_GID=${NAPCAT_GID:-1000}
+      - WEBUI_TOKEN=${WEBUI_TOKEN:-napcat}
+      - MODE=qq-ai-bot
+    ports:
+      - 3000:3000
+      - 6099:6099
+    volumes:
+      - ./napcat/config:/app/napcat/config
+      - ./napcat/QQ:/app/.config/QQ
+    networks:
+      - qq_ai_bot_network
+    mac_address: "02:42:ac:11:00:02"
+
+  qq-ai-bot:
+    container_name: qq-ai-bot
+    image: ghcr.io/happysnaker/qq-ai-bot:latest
+    restart: always
+    environment:
+      - BOT_PORT=8080
+      - DATA_DIR=/app/data
+      - SESSION_FILE_PATH=/app/data/sessions.json
+      - ONEBOT_MODE=reverse
+      - ONEBOT_REVERSE_WS_HOST=0.0.0.0
+      - ONEBOT_REVERSE_WS_PORT=16700
+      - ONEBOT_REVERSE_WS_PATH=/onebot/v11/ws
+      - ONEBOT_ALLOW_GROUP=true
+      - ONEBOT_REQUIRE_MENTION_IN_GROUP=true
+      - ONEBOT_ALLOW_PRIVATE=true
+      - ONEBOT_PROGRESS_MODE=message
+      - ACP_AGENT_COMMAND=node
+      - 'ACP_AGENT_ARGS_JSON=["dist/examples/mock-acp-agent.js"]'
+      - ACP_AGENT_WORKDIR=/app
+      - ACP_REUSE_SESSION=true
+      - ACP_VERBOSE_MODE=verbose
+    ports:
+      - 18080:8080
+    volumes:
+      - ./qq-ai-bot/data:/app/data
+    networks:
+      - qq_ai_bot_network
+
+networks:
+  qq_ai_bot_network:
+    driver: bridge
