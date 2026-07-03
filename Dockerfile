@@ -4,7 +4,8 @@ RUN useradd --no-log-init -d /app napcat
 
 WORKDIR /app
 
-COPY NapCat.Shell.zip entrypoint.sh templates /app/
+COPY NapCat.Shell.zip entrypoint.sh /app/
+COPY templates/templates/ /app/templates/
 
 # 安装Linux QQ（带重试，外网可能不稳定）
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
@@ -24,4 +25,3 @@ VOLUME /app/napcat/config
 VOLUME /app/.config/QQ
 
 ENTRYPOINT ["bash", "entrypoint.sh"]
-
