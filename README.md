@@ -84,3 +84,5 @@ NapCat 插件目录路径: /app/napcat/plugins
 [WebsockServer Compose模板](./compose/ws.yml)
 
 > 欢迎Pr.此方案快速填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口和WebUi默认密码。
+
+> `MODE=qq-ai-bot` 会使用镜像内置的 `qq-ai-bot` OneBot11 预设模板生成 `/app/napcat/config/onebot11.json`。
