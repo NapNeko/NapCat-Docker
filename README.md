@@ -10,8 +10,7 @@
 ### 获取日志/查看Token
 `docker logs 容器名`
  
-示例 `docker logs napcat`
-默认登录Token `napcat`
+示例 `docker logs napcat` ，默认登录Token 请查看日志
 ### 命令行运行
 
 ```shell
@@ -26,10 +25,10 @@ docker run -d \
 mlikiowa/napcat-docker:latest
 ```
 
-（ps：在win下部署 以上代码docker萌新小白可能会直接复制粘贴导致报错，提交一个可以直接复制粘贴用的，
- 按照astrbot默认端口建议6199所以新加了个6199，那个uid还没搞清楚是什么）
+> 在win下部署，以上代码docker小白可能会直接复制粘贴导致报错，因此请使用下面的命令
+
 ```shell
-docker run -d -p 6099:6099 -p 3001:3001 -p 6199:6199 --name napcat --restart=always mlikiowa/napcat-docker:latest
+docker run -d -p 6099:6099 -p 3001:3001 --name napcat --restart=always mlikiowa/napcat-docker:latest
 ```
 
 ### docker-compose 运行
@@ -77,10 +76,10 @@ NapCat 插件目录路径: /app/napcat/plugins
 # 一键模板化配置
 [AstrBot Compose模板](./compose/astrbot.yml)
 
-[Koishi Compose模板](./compose/koishi.yml)
+[Koishi Compose模板](./compose/koishi-compose.yml)
 
 [qq-ai-bot Compose模板](./compose/qq-ai-bot.yml)
 
 [WebsockServer Compose模板](./compose/ws.yml)
 
-> 欢迎Pr.此方案快速填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口和WebUi默认密码。
+> 欢迎Pr.此方案快速填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口。
