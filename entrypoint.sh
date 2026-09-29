@@ -4,7 +4,11 @@ trap "" SIGPIPE
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ]; then
     unzip -q NapCat.Shell.zip -d ./NapCat.Shell
-    cp -rf NapCat.Shell/* napcat/
+    for item in NapCat.Shell/*; do
+        if [ "$item" != "NapCat.Shell/config" ]; then
+            cp -rf "$item" napcat/
+        fi
+    done
     rm -rf ./NapCat.Shell
 fi
 if [ ! -f "napcat/config/napcat.json" ]; then
