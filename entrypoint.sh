@@ -213,6 +213,15 @@ groupmod -o -g ${NAPCAT_GID} napcat
 usermod -g ${NAPCAT_GID} napcat
 chown -R ${NAPCAT_UID}:${NAPCAT_GID} /app
 
+# 关闭 core dump。QQ 会预留上 TB 的虚拟地址空间，崩溃时 core 能写出几百 GB，
+# Docker Desktop (WSL) 下会直接写满宿主机系统盘（NapCatQQ #2060）。
+# WSL 这类管道形式的 core_pattern 不受 ulimit 限制，所以同时把 coredump_filter 清零，
+# 崩溃时只留寄存器等基本信息。需要完整 core 调试时设置 NAPCAT_ENABLE_COREDUMP=1。
+if [ "${NAPCAT_ENABLE_COREDUMP}" != "1" ]; then
+    ulimit -c 0 2>/dev/null || true
+    echo 0 > /proc/self/coredump_filter 2>/dev/null || true
+fi
+
 gosu napcat Xvfb :1 -screen 0 1080x760x16 +extension GLX +render > /dev/null 2>&1 &
 sleep 2
 

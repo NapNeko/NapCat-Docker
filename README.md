@@ -72,6 +72,8 @@ NapCat 插件目录路径: /app/napcat/plugins
 
 [前往了解](https://containerization-automation.readthedocs.io/zh-cn/latest/docker/storage/[gosu]%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/)
 
+容器默认关闭 core dump，避免 QQ 崩溃时写出几百 GB 的 core 文件（Docker Desktop / WSL 下会写满系统盘）。需要完整 core 调试时设置 `NAPCAT_ENABLE_COREDUMP=1`。
+
 
 # 一键模板化配置
 [AstrBot Compose模板](./compose/astrbot.yml)
