@@ -2,6 +2,11 @@ name: docker-publish
 
 on:
   workflow_dispatch:
+    inputs:
+      napcat_version:
+        description: 'NapCat release tag (empty selects the latest release once)'
+        required: false
+        type: string
 
 jobs:
   publish-dockerhub:
@@ -10,8 +15,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Get artifacts
+        id: release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NAPCAT_VERSION: ${{ inputs.napcat_version }}
         run: |
-          bash get_artifacts.sh ${{ secrets.GITHUB_TOKEN }} $(curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/NapNeko/NapCatQQ/releases/latest" | jq -r '.tag_name')
+          if [ -z "$NAPCAT_VERSION" ]; then
+            NAPCAT_VERSION=$(curl -fLsS --connect-timeout 15 --max-time 60 \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              https://api.github.com/repos/NapNeko/NapCatQQ/releases/latest | jq -er '.tag_name')
+          fi
+          [[ "$NAPCAT_VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "tag=$NAPCAT_VERSION" >> "$GITHUB_OUTPUT"
+          bash get_artifacts.sh "$GH_TOKEN" "$NAPCAT_VERSION"
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
@@ -23,14 +39,13 @@ jobs:
       - name: Run buildx and push
         env:
           DOCKER_REPO: mlikiowa/napcat-docker
-          GITHUB_REPO: NapNeko/NapCatQQ
+          NAPCAT_VERSION: ${{ steps.release.outputs.tag }}
         run: |
-          TAG=$(curl -sSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/NapNeko/NapCatQQ/releases/latest" | jq -r '.tag_name')
           docker buildx build \
             --output "type=image,push=true" \
             --platform linux/amd64,linux/arm64 \
-            --tag ${DOCKER_REPO}:$TAG \
-            --tag ${DOCKER_REPO}:latest \
+            --tag "${DOCKER_REPO}:$NAPCAT_VERSION" \
+            --tag "${DOCKER_REPO}:latest" \
             --file ./Dockerfile \
             .
       - name: Docker Hub logout

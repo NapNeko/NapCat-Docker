@@ -9,8 +9,9 @@ services:
     mac_address: 02:42:ac:11:00:02  # 添加MAC地址固化配置
     
     environment:
-      - NAPCAT_UID=${NAPCAT_UID}
-      - NAPCAT_GID=${NAPCAT_GID}
+      - NAPCAT_UID=${NAPCAT_UID:-1000}
+      - NAPCAT_GID=${NAPCAT_GID:-1000}
+      - MODE=ws
     
     ports:
       - 3001:3001

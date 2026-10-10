@@ -3,17 +3,18 @@
 trap "" SIGPIPE
 # 安装 napcat
 if [ ! -f "napcat/napcat.mjs" ] || [ ! -f "napcat/config/napcat.json" ]; then
-    unzip -q NapCat.Shell.zip -d ./NapCat.Shell
+    unzip -qo NapCat.Shell.zip -d ./NapCat.Shell || exit 1
+    mkdir -p napcat/config || exit 1
     if [ ! -f "napcat/napcat.mjs" ]; then
         for item in NapCat.Shell/*; do
             if [ "$item" != "NapCat.Shell/config" ]; then
-                cp -rf "$item" napcat/
+                cp -rf "$item" napcat/ || exit 1
             fi
         done
     fi
     if [ ! -f "napcat/config/napcat.json" ]; then
         mkdir -p napcat/config
-        cp -rf NapCat.Shell/config/* napcat/config/
+        cp -rn NapCat.Shell/config/. napcat/config/ || exit 1
     fi
     rm -rf ./NapCat.Shell
 fi
@@ -23,15 +24,8 @@ CONFIG_PATH=/app/napcat/config/webui.json
 
 if [ ! -f "${CONFIG_PATH}" ] && [ -n "${WEBUI_TOKEN}" ]; then
     echo "正在配置 WebUI Token..."
-    cat > "${CONFIG_PATH}" << EOF
-{
-    "host": "0.0.0.0",
-    "prefix": "${WEBUI_PREFIX}",
-    "port": 6099,
-    "token": "${WEBUI_TOKEN}",
-    "loginRate": 3
-}
-EOF
+    jq -n --arg prefix "${WEBUI_PREFIX}" --arg token "${WEBUI_TOKEN}" \
+        '{host: "0.0.0.0", prefix: $prefix, port: 6099, token: $token, loginRate: 3}' > "${CONFIG_PATH}" || exit 1
 fi
 
 # 删除字符串两端的引号
@@ -52,8 +46,21 @@ remove_quotes() {
     echo "$str"
 }
 
-if [ -n "${MODE}" ]; then
-    cp /app/templates/$MODE.json /app/napcat/config/onebot11.json
+if [ -n "${MODE}" ] && [ ! -f /app/napcat/config/onebot11.json ]; then
+    case "${MODE}" in
+        reverse_ws)
+            jq --arg url "${ONEBOT_URL:?MODE=reverse_ws requires ONEBOT_URL}" \
+                '.network.websocketClients[0].url = $url' \
+                /app/templates/nonebot.json > /app/napcat/config/onebot11.json.tmp || exit 1
+            ;;
+        reverse_http)
+            jq --arg url "${ONEBOT_URL:?MODE=reverse_http requires ONEBOT_URL}" \
+                '.network.httpClients = [.network.websocketClients[0] | .name = "reverse_http" | .url = $url | del(.heartInterval, .reconnectInterval)] | .network.websocketClients = []' \
+                /app/templates/nonebot.json > /app/napcat/config/onebot11.json.tmp || exit 1
+            ;;
+        *) cp "/app/templates/${MODE}.json" /app/napcat/config/onebot11.json.tmp || exit 1 ;;
+    esac
+    mv /app/napcat/config/onebot11.json.tmp /app/napcat/config/onebot11.json || exit 1
 fi
 
 rm -rf "/tmp/.X1-lock"

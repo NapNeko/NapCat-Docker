@@ -1,15 +1,16 @@
 #!/bin/bash
+set -euo pipefail
 
 token="$1"
 version="$2"
 
-# 设置输出目录
-output_dir="."
-# 下载release
-curl -s -X GET \
-    -H "Authorization: token $token" \
-    -L "https://github.com/NapNeko/NapCatQQ/releases/download/$version/NapCat.Shell.zip" \
-    -o "$output_dir/NapCat.Shell.zip"
-
-echo "编译产物已保存到$output_dir"
-ls -lh
+archive=$(mktemp ./NapCat.Shell.zip.XXXXXX)
+trap 'rm -f -- "$archive"' EXIT
+curl -fLsS --connect-timeout 20 --max-time 1800 \
+    --proto '=http,https' --proto-redir '=http,https' \
+    -H "Authorization: Bearer $token" \
+    "https://github.com/NapNeko/NapCatQQ/releases/download/$version/NapCat.Shell.zip" \
+    -o "$archive"
+unzip -tq "$archive"
+mv -- "$archive" NapCat.Shell.zip
+echo "已下载 NapCat $version"
