@@ -237,7 +237,6 @@ fi
 gosu napcat Xvfb :1 -screen 0 1080x760x16 +extension GLX +render > /dev/null 2>&1 &
 sleep 2
 
-export FFMPEG_PATH=/usr/bin/ffmpeg
 export DISPLAY=:1
 cd /app/napcat
 if [ -n "${ACCOUNT}" ]; then
