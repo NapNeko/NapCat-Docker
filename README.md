@@ -1,87 +1,44 @@
 # NapCat-Docker
 
-[DockerHub](https://hub.docker.com/r/mlikiowa/napcat-docker)
+[Docker Hub](https://hub.docker.com/r/mlikiowa/napcat-docker) · Linux amd64 / arm64
 
-## Support Platform/Arch
-- [x] Linux/Amd64
-- [x] Linux/Arm64
+## 启动
 
-# 启动容器
-### 获取日志/查看Token
-`docker logs 容器名`
- 
-示例 `docker logs napcat` ，默认登录Token 请查看日志
-### 命令行运行
+保存为 `compose.yaml`，修改 `WEBUI_TOKEN`：
 
-```shell
-docker run -d \
--e NAPCAT_GID=$(id -g) \
--e NAPCAT_UID=$(id -u) \
--p 3000:3000 \
--p 3001:3001 \
--p 6099:6099 \
---name napcat \
---restart=always \
-mlikiowa/napcat-docker:latest
-```
-
-> 在win下部署，以上代码docker小白可能会直接复制粘贴导致报错，因此请使用下面的命令
-
-```shell
-docker run -d -p 6099:6099 -p 3001:3001 --name napcat --restart=always mlikiowa/napcat-docker:latest
-```
-
-### docker-compose 运行
-
-创建 `docker-compose.yml` 文件
 ```yaml
-# docker-compose.yml
-version: "3"
 services:
-    napcat:
-        environment:
-            - NAPCAT_UID=${NAPCAT_UID}
-            - NAPCAT_GID=${NAPCAT_GID}
-        ports:
-            - 3000:3000
-            - 3001:3001
-            - 6099:6099
-        container_name: napcat
-        network_mode: bridge
-        restart: always
-        image: mlikiowa/napcat-docker:latest
+  napcat:
+    image: mlikiowa/napcat-docker:latest
+    restart: unless-stopped
+    environment:
+      MODE: ws
+      WEBUI_TOKEN: replace-with-your-own-token
+    ports:
+      - "127.0.0.1:6099:6099"
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - ./data/qq:/app/.config/QQ
+      - ./data/config:/app/napcat/config
+      - ./data/plugins:/app/napcat/plugins
 ```
 
-使用 `NAPCAT_UID=$(id -u) NAPCAT_GID=$(id -g) docker-compose up -d` 运行到后台
+```bash
+docker compose up -d
+docker compose logs -f napcat
+```
 
+打开 `http://127.0.0.1:6099/webui` 登录。远程访问需调整端口绑定地址或使用 SSH 转发。
 
-# 固化路径，方便下次直接快速登录
+## 配置与更新
 
-QQ 持久化数据路径：/app/.config/QQ
+- `MODE=ws` 启用正向 WebSocket；反向连接使用 `reverse_ws` / `reverse_http`，并设置 `ONEBOT_URL`。
+- `WEBUI_TOKEN`、`MODE` 仅初始化缺失的配置。已有部署在 WebUI 中修改。
+- `NAPCAT_UID`、`NAPCAT_GID` 指定运行用户，挂载目录需允许该用户读写；群晖还需设置共享目录 ACL。
+- 更新执行 `docker compose pull && docker compose up -d`，保留三个数据目录。固定版本时将 `latest` 换成发布标签。
+- 镜像拉取的代理需配置在 Docker daemon 中。
+- 需要调试 core dump 时设置 `NAPCAT_ENABLE_COREDUMP=1`。
 
-NapCat 配置文件路径: /app/napcat/config
+## 机器人框架模板
 
-NapCat 插件目录路径: /app/napcat/plugins
-
-# 登录
-
-登录 WebUI 地址：http://<宿主机ip>:6099/webui
-
-# Tips
-关于 NAPCAT_UID 与 NAPCAT_GID 环境变量
-
-[前往了解](https://containerization-automation.readthedocs.io/zh-cn/latest/docker/storage/[gosu]%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/)
-
-容器默认关闭 core dump，避免 QQ 崩溃时写出几百 GB 的 core 文件（Docker Desktop / WSL 下会写满系统盘）。需要完整 core 调试时设置 `NAPCAT_ENABLE_COREDUMP=1`。
-
-
-# 一键模板化配置
-[AstrBot Compose模板](./compose/astrbot.yml)
-
-[Koishi Compose模板](./compose/koishi-compose.yml)
-
-[qq-ai-bot Compose模板](./compose/qq-ai-bot.yml)
-
-[WebsockServer Compose模板](./compose/ws.yml)
-
-> 欢迎Pr.此方案快速填充NapCat侧配置,你只需要配置应用侧,注意当你不需要WebUi或者处于公网环境,请注意6099端口。
+[AstrBot](./compose/astrbot.yml) · [Koishi](./compose/koishi-compose.yml) · [qq-ai-bot](./compose/qq-ai-bot.yml) · [WebSocket](./compose/ws.yml)
