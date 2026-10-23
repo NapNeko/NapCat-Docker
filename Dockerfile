@@ -7,6 +7,15 @@ WORKDIR /app
 COPY NapCat.Shell.zip entrypoint.sh /app/
 COPY templates/templates/ /app/templates/
 
+# Refresh the separately published base, including older bases with build headers.
+# linuxqq declares xdg-utils; install it before dpkg's existing --force-depends step.
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends xdg-utils && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends && \
+    apt-get purge -y linux-libc-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
     curl --retry 3 --connect-timeout 30 --max-time 600 -fL -o linuxqq.deb \
         "https://qqdl.gtimg.cn/qqfile/QQNT/9.9.36/beta/9ee04bef/linuxqq_3.2.34-53644_${arch}.deb" && \
