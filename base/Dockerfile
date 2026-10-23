@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     libasound2 \
     fonts-wqy-zenhei \
     gnutls-bin \
-    libglib2.0-dev \
+    libglib2.0-0 \
     libdbus-1-3 \
     libgtk-3-0 \
     libxss1 \
@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     jq \
     gosu \
+    xdg-utils \
     tzdata && \
     echo "${TZ}" > /etc/timezone && \ 
     ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \

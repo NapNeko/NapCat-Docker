@@ -39,6 +39,10 @@ docker compose logs -f napcat
 - 镜像拉取的代理需配置在 Docker daemon 中。
 - 需要调试 core dump 时设置 `NAPCAT_ENABLE_COREDUMP=1`。
 
+维护者构建发布镜像时应使用 `docker buildx build --pull --no-cache ...`，确保读取当前基础镜像和 Ubuntu 安全仓库。最终镜像会刷新系统包、补齐 Linux QQ 声明的 `xdg-utils` 依赖，并移除运行时不需要的内核开发头；此步骤不升级 QQ 内嵌的 Electron/Node，也不改变账号与配置挂载目录。
+
+构建后可运行 `bash tests/runtime-smoke.sh <image>`，在不联网、不挂载账号目录的临时容器中检查包状态、QQ 共享库和 WebUI 启动。脚本会删除自己创建的临时容器；此检查不包含 QQ 登录、消息收发或插件验收。
+
 ## 机器人框架模板
 
 [AstrBot](./compose/astrbot.yml) · [Koishi](./compose/koishi-compose.yml) · [qq-ai-bot](./compose/qq-ai-bot.yml) · [WebSocket](./compose/ws.yml)
